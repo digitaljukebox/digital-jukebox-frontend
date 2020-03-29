@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
+import fb from '../firebaseConfig.js';
 import routes from './routes'
 
 Vue.use(VueRouter)
@@ -24,6 +24,19 @@ export default function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
+  })
+
+  Router.beforeEach((to, from, next) => {
+    const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+    const currentUser = fb.auth.currentUser
+  
+    if (requiresAuth && !currentUser) {
+        next('/login')
+    } else if (requiresAuth && currentUser) {
+        next()
+    } else {
+        next()
+    }
   })
 
   return Router
