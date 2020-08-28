@@ -35,7 +35,7 @@ const routes: RouteConfig[] = [
     children: [
       {
         path: '',
-        component: () => import('pages/NearbyVenues.vue')
+        component: () => import('pages/NearbyVenues.vue'),
       }
     ]
   },
