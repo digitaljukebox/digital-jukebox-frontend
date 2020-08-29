@@ -1,6 +1,8 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 
+require('firebase/firestore');
+
 /**
  * Firebase's auth interface method
  * https: //firebase.google.com/docs/reference/js/firebase.auth.html#callable
@@ -36,6 +38,10 @@ export const ensureAuthIsInitialized = async (store: any) => {
  */
 export const fBInit = (config: any) => {
   return firebase.initializeApp(config)
+}
+
+export const getFirestore = () => {
+  return firebase.firestore();
 }
 
 /** Handle the auth state of the user and
