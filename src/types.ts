@@ -34,10 +34,13 @@ export class NCoordinates {
   }
 }
 
+// TODO after the User model is added, the venue interface needs 2 extra fields:
+// temp banlist and perm banlist, arrays of Users.
 export interface Venue {
   id: number; // starts at 0 and increments
   name: string;
   address: string;
+  description: string;
   location: NCoordinates;
   photoUrl: string; // display photo
 }
@@ -48,6 +51,7 @@ export function venueFromFirestoreDocument(doc: Document) {
     id: data.id,
     name: data.name,
     address: data.address,
+    description: data.description,
     location: new NCoordinates(data.location.latitude, data.location.longitude),
     photoUrl: data.photoUrl,
   }

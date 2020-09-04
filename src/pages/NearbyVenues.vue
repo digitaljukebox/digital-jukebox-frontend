@@ -7,7 +7,7 @@
 
     <div v-if="tab == 'list'">
       <q-list bordered separator>
-        <q-item clickable v-ripple v-for="venue in venues" :key=venue.id>
+        <q-item clickable @click="navigateToInfoPage(venue.id)" v-ripple v-for="venue in venues" :key=venue.id>
           <q-item-section>
             <q-item-label>{{ venue.name }}</q-item-label>
             <q-item-label caption>{{ getVenueDistance(venue.location) }}</q-item-label>
@@ -62,6 +62,7 @@ export default {
         })
       });
       
+      
 
     },
     getUserLocation() {
@@ -82,6 +83,9 @@ export default {
       } else {
         return '????';
       }
+    },
+    navigateToInfoPage(venueId: number) {
+      this.$router.push(`/venue/${venueId}`);
     }
   },
   mounted() {
