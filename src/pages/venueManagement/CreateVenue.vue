@@ -52,6 +52,53 @@
           <template v-slot:prepend>
             <q-icon name="fas fa-file-alt" />
           </template>
+          <template v-slot:append>
+            <q-icon
+              name="fas fa-times-circle"
+              @click="venue.description = ''"
+              class="cursor-pointer"
+              color="grey"
+            />
+          </template>
+        </q-input>
+        <q-input label="Email Address" v-model="venue.email">
+          <template v-slot:prepend>
+            <q-icon name="fas fa-envelope" />
+          </template>
+          <template v-slot:append>
+            <q-icon
+              name="fas fa-times-circle"
+              @click="venue.email = ''"
+              class="cursor-pointer"
+              color="grey"
+            />
+          </template>
+        </q-input>
+        <q-input label="Phone Number" v-model="venue.phoneNumber">
+          <template v-slot:prepend>
+            <q-icon name="fas fa-phone" />
+          </template>
+          <template v-slot:append>
+            <q-icon
+              name="fas fa-times-circle"
+              @click="venue.phoneNumber = ''"
+              class="cursor-pointer"
+              color="grey"
+            />
+          </template>
+        </q-input>
+        <q-input label="Website" v-model="venue.website">
+          <template v-slot:prepend>
+            <q-icon name="fas fa-globe" />
+          </template>
+          <template v-slot:append>
+            <q-icon
+              name="fas fa-times-circle"
+              @click="venue.website = ''"
+              class="cursor-pointer"
+              color="grey"
+            />
+          </template>
         </q-input>
       </div>
     </div>
@@ -117,7 +164,9 @@ export default {
         name: null,
         photoURL: null,
         location: null,
-        address: null
+        address: null,
+        email: null,
+        phoneNumber: null
       },
       center: {
         lat: -27.4697707,
