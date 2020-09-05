@@ -77,6 +77,11 @@ const linksData = [
     title: 'Your Profile',
     icon: 'fas fa-user',
     link: '/profile'
+  },
+  {
+    title: 'Manage Venues',
+    link: '/manage-venues',
+    icon: 'fas fa-sliders-h'
   }
 ];
 
