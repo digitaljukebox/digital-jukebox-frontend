@@ -18,7 +18,8 @@
     "core-js": "^3.6.5",
     "firebase": "^7.19.0",
     "firebaseui": "^4.6.1",
-    "quasar": "^1.0.0"
+    "quasar": "^1.0.0",
+    "vue-phone-number-input": "^1.1.10"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",

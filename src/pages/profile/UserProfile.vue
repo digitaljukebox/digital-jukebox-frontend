@@ -30,6 +30,16 @@
             <q-item-label>{{ user.email }}</q-item-label>
           </q-item-section>
         </q-item>
+        <q-item>
+          <q-item-section avatar>
+            <q-avatar color="green" text-color="white" icon="fas fa-phone" />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label overline>PHONE NUMBER</q-item-label>
+            <q-item-label>{{ user.phoneNumber }}</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </div>
     <div class="row justify-center q-mt-lg">
@@ -41,6 +51,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import firebase from 'firebase';
+import 'firebase/firestore';
+const db = firebase.firestore();
 
 export default Vue.extend({
   name: 'UserProfile',
@@ -49,8 +61,8 @@ export default Vue.extend({
       user: null
     };
   },
-  created() {
-    firebase.auth().onAuthStateChanged(user => {
+  async created() {
+    firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         this.user = user;
       }

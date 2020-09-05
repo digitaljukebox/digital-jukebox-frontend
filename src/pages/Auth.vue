@@ -12,7 +12,6 @@
 import firebase, { auth } from 'firebase';
 import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
-
 import 'firebase/firestore';
 
 const db = firebase.firestore();
@@ -35,16 +34,20 @@ export default {
 
     const uiConfig: firebaseui.auth.Config = {
       callbacks: {
-        signInSuccessWithAuthResult: (authResult: any, redirectUrl) => {
+        signInSuccessWithAuthResult: (
+          authResult: firebase.auth.UserCredential,
+          redirectUrl
+        ) => {
           console.log(authResult);
           // create or update the user's entry in the DB
-          db.collection('users')
-            .doc(authResult.user.uid)
-            .set({
-              email: authResult.user.email,
-              displayName: authResult.user.displayName,
-              photoURL: authResult.user.photoURL
-            });
+          // db.collection('users')
+          //   .doc(authResult.user.uid)
+          //   .set({
+          //     email: authResult.user.email,
+          //     displayName: authResult.user.displayName,
+          //     photoURL: authResult.user.photoURL,
+          //     phoneNumber: authResult.user.phoneNumber,
+          //   });
 
           this.$router.push('/');
           return true;
