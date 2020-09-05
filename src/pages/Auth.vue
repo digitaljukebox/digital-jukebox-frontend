@@ -30,8 +30,23 @@ export default {
     }
 
     const uiConfig = {
-      signInSuccessUrl: '/profile',
-      signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID]
+      callbacks: {
+        signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+          if (authResult.additionalUserInfo.isNewUser) {
+            console.log('save to db');
+          }
+
+          this.$router.push('/');
+          return true;
+        }
+      },
+      signInOptions: [
+        {
+          provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+          signInMethod:
+            firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD
+        }
+      ]
     };
     ui.start('#firebaseui-auth-container', uiConfig);
   }
