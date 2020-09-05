@@ -2,7 +2,12 @@
   <q-page padding>
     <div class="row justify-center"><h4>Your Venues</h4></div>
     <div class="row justify-center">
-      <q-list bordered separator style="max-width: 500px; flex:1">
+      <q-list
+        bordered
+        separator
+        style="max-width: 500px; flex:1"
+        v-if="venues.length > 0"
+      >
         <q-item
           clickable
           v-ripple
@@ -14,10 +19,11 @@
             <q-item-label>{{ venue.name }}</q-item-label>
           </q-item-section>
           <q-item-section avatar>
-            <q-icon name="fas fa-chevron-right" />
+            <q-icon name="fas fa-edit" />
           </q-item-section>
         </q-item>
       </q-list>
+      <p v-else>You don't manage any venues</p>
     </div>
     <div class="row justify-center">
       <q-btn
