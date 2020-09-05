@@ -6,16 +6,14 @@
           flat
           dense
           round
-          icon="menu"
+          icon="fas fa-bars"
           aria-label="Menu"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
         <q-toolbar-title>
-            Digital Jukebox
+          Digital Jukebox
         </q-toolbar-title>
-
-        
       </q-toolbar>
     </q-header>
 
@@ -41,19 +39,24 @@
 </template>
 
 <script lang="ts">
-import EssentialLink from 'components/EssentialLink.vue'
+import EssentialLink from 'components/EssentialLink.vue';
 
 const linksData = [
   {
     title: 'Home',
-    icon: 'home',
+    icon: 'fas fa-home',
     link: '/'
   },
   {
     title: 'Nearby Venues',
-    icon: 'location_on',
+    icon: 'fas fa-map-marker',
     link: '/nearby'
   },
+  {
+    title: 'Your Profile',
+    icon: 'fas fa-user',
+    link: '/profile'
+  }
 ];
 
 import { defineComponent, ref } from '@vue/composition-api';
@@ -65,7 +68,7 @@ export default defineComponent({
     const leftDrawerOpen = ref(false);
     const essentialLinks = ref(linksData);
 
-    return {leftDrawerOpen, essentialLinks}
+    return { leftDrawerOpen, essentialLinks };
   }
 });
 </script>
