@@ -10,7 +10,6 @@
           aria-label="Menu"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
-
         <q-toolbar-title>
           Digital Jukebox
         </q-toolbar-title>
@@ -23,13 +22,25 @@
       bordered
       content-class="bg-grey-1"
     >
-      <q-list>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
+      <template v-if="user">
+        <q-list>
+          <EssentialLink
+            v-for="link in essentialLinks"
+            :key="link.title"
+            v-bind="link"
+          />
+        </q-list>
+        <div class="row justify-center q-mt-lg">
+          <q-btn color="primary" label="Log Out" @click="signOut" />
+        </div>
+      </template>
+      <template v-else>
+        <q-list>
+          <EssentialLink
+            v-bind="{ title: 'Log in', icon: 'fas fa-user', path: '/login' }"
+          />
+        </q-list>
+      </template>
     </q-drawer>
 
     <q-page-container>
@@ -60,6 +71,7 @@ const linksData = [
 ];
 
 import { defineComponent, ref } from '@vue/composition-api';
+import firebase from 'firebase';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -69,6 +81,25 @@ export default defineComponent({
     const essentialLinks = ref(linksData);
 
     return { leftDrawerOpen, essentialLinks };
+  },
+  data() {
+    return {
+      user: null
+    };
+  },
+  created() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.user = user;
+      }
+    });
+  },
+  methods: {
+    signOut(e) {
+      e.stopPropagation();
+      firebase.auth().signOut();
+      this.$router.push('/login');
+    }
   }
 });
 </script>

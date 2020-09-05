@@ -17,7 +17,7 @@
 
           <q-item-section>
             <q-item-label overline>NAME</q-item-label>
-            <q-item-label>Firstname Lastname</q-item-label>
+            <q-item-label>{{ user.displayName }}</q-item-label>
           </q-item-section>
         </q-item>
         <q-item>
@@ -27,7 +27,7 @@
 
           <q-item-section>
             <q-item-label overline>EMAIL</q-item-label>
-            <q-item-label>email@example.com</q-item-label>
+            <q-item-label>{{ user.email }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -40,7 +40,21 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import firebase from 'firebase';
+
 export default Vue.extend({
-  name: 'UserProfile'
+  name: 'UserProfile',
+  data() {
+    return {
+      user: null
+    };
+  },
+  created() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.user = user;
+      }
+    });
+  }
 });
 </script>

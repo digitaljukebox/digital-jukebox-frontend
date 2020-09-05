@@ -7,22 +7,12 @@ const routes: RouteConfig[] = [
     children: [{ path: '', component: () => import('pages/Index.vue') }]
   },
   {
-    path: '/auth',
+    path: '/login',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
-        path: 'forgotPassword',
-        name: 'ForgotPassword',
-        component: () => import('pages/ForgotPassword.vue')
-      },
-      {
-        path: 'login',
+        path: '',
         name: 'Login',
-        component: () => import('pages/Auth.vue')
-      },
-      {
-        path: 'register',
-        name: 'Register',
         component: () => import('pages/Auth.vue')
       }
     ]
@@ -49,6 +39,9 @@ const routes: RouteConfig[] = [
   },
   {
     path: '/profile',
+    meta: {
+      auth: true
+    },
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
