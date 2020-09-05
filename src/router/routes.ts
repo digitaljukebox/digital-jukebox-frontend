@@ -3,6 +3,9 @@ import { RouteConfig } from 'vue-router';
 const routes: RouteConfig[] = [
   {
     path: '/',
+    meta: {
+      auth: true
+    },
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/Index.vue') }]
   },
@@ -19,6 +22,9 @@ const routes: RouteConfig[] = [
   },
   {
     path: '/nearby',
+    meta: {
+      auth: true
+    },
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
@@ -29,6 +35,9 @@ const routes: RouteConfig[] = [
   },
   {
     path: '/venue/:id',
+    meta: {
+      auth: true
+    },
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {

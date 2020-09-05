@@ -2,7 +2,7 @@
   <q-page padding>
     <div class="row justify-center">
       <q-img
-        src="../../assets/profilePicturePlaceholder.jpg"
+        :src="user.photoURL"
         spinner-color="white"
         style="height: 200px; max-width: 200px;"
         class="q-ma-lg"

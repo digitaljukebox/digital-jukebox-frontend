@@ -8,10 +8,14 @@
   </q-page>
 </template>
 
-<script>
-import firebase from 'firebase';
+<script lang="ts">
+import firebase, { auth } from 'firebase';
 import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
+
+import 'firebase/firestore';
+
+const db = firebase.firestore();
 
 export default {
   name: 'Auth',
@@ -29,12 +33,18 @@ export default {
       ui = new firebaseui.auth.AuthUI(firebase.auth());
     }
 
-    const uiConfig = {
+    const uiConfig: firebaseui.auth.Config = {
       callbacks: {
-        signInSuccessWithAuthResult: (authResult, redirectUrl) => {
-          if (authResult.additionalUserInfo.isNewUser) {
-            console.log('save to db');
-          }
+        signInSuccessWithAuthResult: (authResult: any, redirectUrl) => {
+          console.log(authResult);
+          // create or update the user's entry in the DB
+          db.collection('users')
+            .doc(authResult.user.uid)
+            .set({
+              email: authResult.user.email,
+              displayName: authResult.user.displayName,
+              photoURL: authResult.user.photoURL
+            });
 
           this.$router.push('/');
           return true;
@@ -45,8 +55,15 @@ export default {
           provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
           signInMethod:
             firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD
-        }
-      ]
+        },
+        {
+          provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          clientId:
+            '120161791220-p271bsbvleeie316r40nmt7gfe9a92ip.apps.googleusercontent.com'
+        },
+        firebase.auth.PhoneAuthProvider.PROVIDER_ID
+      ],
+      credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
     };
     ui.start('#firebaseui-auth-container', uiConfig);
   }
