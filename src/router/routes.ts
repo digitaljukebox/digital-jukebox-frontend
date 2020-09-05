@@ -81,6 +81,10 @@ const routes: RouteConfig[] = [
       },
       {
         path: ':id',
+        component: () => import('pages/venueManagement/VenueDetails.vue')
+      },
+      {
+        path: ':id/edit',
         component: () => import('pages/venueManagement/CreateEditVenue.vue')
       }
     ]

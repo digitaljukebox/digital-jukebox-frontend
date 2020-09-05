@@ -13,13 +13,13 @@
           v-ripple
           v-for="venue in venues"
           :key="venue.id"
-          @click="navigateToEditPage(venue.id)"
+          @click="navigateToDetailPage(venue.id)"
         >
           <q-item-section>
             <q-item-label>{{ venue.name }}</q-item-label>
           </q-item-section>
           <q-item-section avatar>
-            <q-icon name="fas fa-edit" />
+            <q-icon name="fas fa-chevron-right" />
           </q-item-section>
         </q-item>
       </q-list>
@@ -63,7 +63,7 @@ export default {
     });
   },
   methods: {
-    navigateToEditPage(venueId) {
+    navigateToDetailPage(venueId) {
       this.$router.push(`/manage-venues/${venueId}`);
     }
   }
