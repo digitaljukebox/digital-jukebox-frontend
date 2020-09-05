@@ -4,9 +4,7 @@ const routes: RouteConfig[] = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Index.vue') }
-    ]
+    children: [{ path: '', component: () => import('pages/Index.vue') }]
   },
   {
     path: '/auth',
@@ -35,7 +33,7 @@ const routes: RouteConfig[] = [
     children: [
       {
         path: '',
-        component: () => import('pages/NearbyVenues.vue'),
+        component: () => import('pages/NearbyVenues.vue')
       }
     ]
   },
@@ -46,6 +44,20 @@ const routes: RouteConfig[] = [
       {
         path: '',
         component: () => import('pages/VenueInfo.vue')
+      }
+    ]
+  },
+  {
+    path: '/profile',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('pages/profile/UserProfile.vue')
+      },
+      {
+        path: 'edit',
+        component: () => import('pages/profile/EditProfile.vue')
       }
     ]
   },
