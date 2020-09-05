@@ -1,6 +1,6 @@
-# Digital Jukebox (digital-jukebox-frontend)
+# Digital Jukebox (frontend)
 
-A Quasar Framework app
+Digital Jukebox front end app
 
 ## Install the dependencies
 ```bash
