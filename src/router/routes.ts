@@ -64,6 +64,19 @@ const routes: RouteConfig[] = [
       }
     ]
   },
+  {
+    path: '/manage-venues',
+    meta: {
+      auth: true
+    },
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('pages/venueManagement/manageVenues.vue')
+      }
+    ]
+  },
 
   // Always leave this as last one,
   // but you can also remove it
