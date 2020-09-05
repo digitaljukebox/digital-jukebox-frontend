@@ -1,5 +1,7 @@
 import firebaseService from '../services/firebase';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export default ({ store, Vue }) => {
   const config  = {
     apiKey: 'AIzaSyAu3v71qDLKEEF4QCpOezDfnJlBMXv3Kno',

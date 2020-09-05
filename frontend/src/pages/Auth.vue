@@ -30,7 +30,7 @@
         @keyup.enter="onSubmit();"
       >
         <template v-slot:append>
-          <q-icon class="cursor-pointer" :name="isPwd ? 'visibility_off' : 'visibility'" @click="isPwd = !isPwd" />
+          <q-icon class="cursor-pointer" :name="isPwd ? 'fas fa-eye-slash' : 'fas fa-eye'" @click="isPwd = !isPwd" />
         </template>
       </q-input>
       <q-input
@@ -47,7 +47,7 @@
         @keyup.enter="onSubmit();"
       >
         <template v-slot:append>
-          <q-icon class="cursor-pointer" :name="isPwd ? 'visibility_off' : 'visibility'" @click="isPwd = !isPwd" />
+          <q-icon class="cursor-pointer" :name="isPwd ? 'fas fa-eye-slash' : 'fas fa-eye'" @click="isPwd = !isPwd" />
         </template>
       </q-input>
       <q-btn
@@ -73,6 +73,7 @@
 </template>
 
 <script>
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call,@typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-assignment */
 import { mapActions } from 'vuex'
 import { QSpinnerGears } from 'quasar'
 export default {

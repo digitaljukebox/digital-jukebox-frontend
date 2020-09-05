@@ -29,6 +29,7 @@
 </template>
 
 <script>
+/* eslint-disable @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call,@typescript-eslint/restrict-template-expressions,@typescript-eslint/no-unsafe-assignment */
 import { QSpinnerGears } from 'quasar'
 export default {
   name: 'ForgotPassword',

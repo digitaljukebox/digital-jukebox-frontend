@@ -6,24 +6,31 @@
 // boot file.
 
 export const createNewUser = function ($root: any, data: { email: string; password: string }) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const $fb = this.$fb
   const { email, password } = data
   return $fb.createUserWithEmail(email, password)
 }
 
 export const loginUser = function ($root: any, payload: { email: any; password: any }) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const $fb = this.$fb
   const { email, password } = payload
   return $fb.loginWithEmail(email, password)
 }
 
 export const logoutUser = async function () {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const $fb = this.$fb
   await $fb.logoutUser()
 }
 
 export function routeUserToAuth () {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-member-access,@typescript-eslint/ban-ts-comment
+  // @ts-ignore
   this.$router.push({
     path: '/auth/login'
   })
