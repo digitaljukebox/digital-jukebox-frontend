@@ -8,6 +8,24 @@
         class="q-ma-lg"
       />
     </div>
+
+    <div>
+      <div class="row justify-center q-mb-lg">
+        <q-btn
+          @click="chooseImage"
+          label="choose a new photo"
+          :loading="uploadingImage"
+        />
+        <input
+          type="file"
+          ref="input1"
+          style="display: none"
+          @change="previewImage"
+          accept="image/*"
+        />
+      </div>
+    </div>
+
     <div class="row justify-center">
       <div class="q-gutter-y-md column" style="max-width: 300px; flex: 1">
         <q-input label="Name" v-model="user.displayName">
@@ -63,6 +81,7 @@ import 'firebase/firestore';
 const db = firebase.firestore();
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+import { v4 } from 'uuid';
 
 Vue.component('vue-phone-number-input', VuePhoneNumberInput);
 
@@ -79,7 +98,10 @@ export default {
       validNumber: null,
       firebaseUser: null,
       appVerifier: null,
-      saving: false
+      saving: false,
+      imageData: null,
+      image: null,
+      uploadingImage: false
     };
   },
   async created() {
@@ -101,6 +123,42 @@ export default {
     }
   },
   methods: {
+    chooseImage() {
+      // trigger the file uploader
+      this.$refs.input1.click();
+    },
+    previewImage(event) {
+      this.image = null;
+      this.imageData = event.target.files[0];
+      this.onUpload();
+    },
+    onUpload() {
+      this.uploadingImage = true;
+      this.user.photoURL = null;
+
+      const storageRef = firebase
+        .storage()
+        .ref(`profile-pictures/${this.firebaseUser.uid}:${v4()}`)
+        .put(this.imageData);
+
+      storageRef.on(
+        `state_changed`,
+        snapshot => {
+          this.uploadValue =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        error => {
+          console.log(error.message);
+        },
+        () => {
+          this.uploadValue = 100;
+          storageRef.snapshot.ref.getDownloadURL().then(url => {
+            this.user.photoURL = url;
+            this.uploadingImage = false;
+          });
+        }
+      );
+    },
     async save() {
       this.saving = true;
 
