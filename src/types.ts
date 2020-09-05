@@ -46,7 +46,7 @@ export interface Venue {
   address: string;
   description: string;
   location: NCoordinates;
-  photoUrl: string; // display photo
+  photoURL: string; // display photo
 }
 
 export function venueFromFirestoreDocument(
@@ -60,7 +60,7 @@ export function venueFromFirestoreDocument(
     address: data.address,
     description: data.description,
     location: new NCoordinates(data.location.latitude, data.location.longitude),
-    photoUrl: data.photoUrl
+    photoURL: data.photoURL
   };
 
   return venue;
