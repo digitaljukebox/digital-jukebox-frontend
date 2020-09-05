@@ -73,7 +73,11 @@ const routes: RouteConfig[] = [
     children: [
       {
         path: '',
-        component: () => import('pages/venueManagement/manageVenues.vue')
+        component: () => import('pages/venueManagement/ManageVenues.vue')
+      },
+      {
+        path: 'create',
+        component: () => import('pages/venueManagement/CreateVenue.vue')
       }
     ]
   },

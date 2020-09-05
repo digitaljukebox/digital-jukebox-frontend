@@ -50,7 +50,7 @@ export interface Venue {
 }
 
 export function venueFromFirestoreDocument(
-  doc: firebase.firestore.QueryDocumentSnapshot<Venue>
+  doc: firebase.firestore.QueryDocumentSnapshot
 ) {
   const data = doc.data();
 
