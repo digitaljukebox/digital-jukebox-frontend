@@ -89,9 +89,7 @@ export default defineComponent({
   },
   created() {
     firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.user = user;
-      }
+      this.user = user;
     });
   },
   methods: {

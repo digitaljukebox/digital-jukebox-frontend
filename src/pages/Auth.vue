@@ -34,21 +34,7 @@ export default {
 
     const uiConfig: firebaseui.auth.Config = {
       callbacks: {
-        signInSuccessWithAuthResult: (
-          authResult: firebase.auth.UserCredential,
-          redirectUrl
-        ) => {
-          console.log(authResult);
-          // create or update the user's entry in the DB
-          // db.collection('users')
-          //   .doc(authResult.user.uid)
-          //   .set({
-          //     email: authResult.user.email,
-          //     displayName: authResult.user.displayName,
-          //     photoURL: authResult.user.photoURL,
-          //     phoneNumber: authResult.user.phoneNumber,
-          //   });
-
+        signInSuccessWithAuthResult: () => {
           this.$router.push('/');
           return true;
         }
@@ -68,6 +54,8 @@ export default {
       ],
       credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
     };
+
+    ui.disableAutoSignIn();
     ui.start('#firebaseui-auth-container', uiConfig);
   }
 };
