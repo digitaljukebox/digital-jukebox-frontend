@@ -29,6 +29,26 @@ const routes: RouteConfig[] = [
       }
     ]
   },
+  {
+    path: '/nearby',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('pages/NearbyVenues.vue'),
+      }
+    ]
+  },
+  {
+    path: '/venue/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('pages/VenueInfo.vue')
+      }
+    ]
+  },
 
   // Always leave this as last one,
   // but you can also remove it
