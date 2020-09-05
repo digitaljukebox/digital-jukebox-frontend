@@ -2,16 +2,28 @@
   <q-page padding>
     <div class="row justify-center"><h4>Your Venues</h4></div>
     <div class="row justify-center">
-      <q-list bordered separator style="max-width: 500px; flex:1">
-        <q-item clickable v-ripple v-for="venue in venues" :key="venue.id">
+      <q-list
+        bordered
+        separator
+        style="max-width: 500px; flex:1"
+        v-if="venues.length > 0"
+      >
+        <q-item
+          clickable
+          v-ripple
+          v-for="venue in venues"
+          :key="venue.id"
+          @click="navigateToEditPage(venue.id)"
+        >
           <q-item-section>
             <q-item-label>{{ venue.name }}</q-item-label>
           </q-item-section>
           <q-item-section avatar>
-            <q-icon name="fas fa-chevron-right" />
+            <q-icon name="fas fa-edit" />
           </q-item-section>
         </q-item>
       </q-list>
+      <p v-else>You don't manage any venues</p>
     </div>
     <div class="row justify-center">
       <q-btn
@@ -43,10 +55,17 @@ export default {
           .where('manager', '==', user.uid)
           .onSnapshot(querySnapshot => {
             this.venues = [];
-            querySnapshot.forEach(doc => this.venues.push(doc.data()));
+            querySnapshot.forEach(doc =>
+              this.venues.push({ ...doc.data(), id: doc.id })
+            );
           });
       }
     });
+  },
+  methods: {
+    navigateToEditPage(venueId) {
+      this.$router.push(`/manage-venues/${venueId}`);
+    }
   }
 };
 </script>

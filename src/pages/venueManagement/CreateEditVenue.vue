@@ -23,6 +23,7 @@
           label="choose a new photo"
           :loading="uploadingImage"
           :percentage="uploadValue"
+          color="secondary"
         />
         <input
           type="file"
@@ -129,7 +130,13 @@
               />
             </div>
           </div>
-          <GmapMarker v-if="venue.location" :position="venue.location" />
+          <GmapMarker
+            v-if="venue.location"
+            :position="{
+              lat: venue.location.latitude,
+              lng: venue.location.longitude
+            }"
+          />
         </GmapMap>
       </div>
     </div>
@@ -187,6 +194,22 @@ export default {
       }
     });
   },
+  mounted() {
+    const venueId = this.$route.params.id;
+    db.collection('venues')
+      .doc(venueId)
+      .get()
+      .then(doc => {
+        let data = doc.data() as any;
+        this.venue = { ...data, location: { ...data.location } };
+        console.log(data);
+
+        this.center = {
+          lat: data.location.latitude,
+          lng: data.location.longitude
+        };
+      });
+  },
   methods: {
     updatePlace(place) {
       console.log(place);
@@ -240,6 +263,7 @@ export default {
           storageRef.snapshot.ref.getDownloadURL().then(url => {
             this.venue.photoURL = url;
             this.uploadingImage = false;
+            this.uploadValue = 0;
           });
         }
       );

@@ -77,7 +77,11 @@ const routes: RouteConfig[] = [
       },
       {
         path: 'create',
-        component: () => import('pages/venueManagement/CreateVenue.vue')
+        component: () => import('pages/venueManagement/CreateEditVenue.vue')
+      },
+      {
+        path: ':id',
+        component: () => import('pages/venueManagement/CreateEditVenue.vue')
       }
     ]
   },
