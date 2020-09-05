@@ -34,10 +34,11 @@
         <div class="row" style="flex-grow: 1"></div>
         <q-separator />
         <div class="row justify-center q-mt-sm items-center q-gutter-md">
-          <q-avatar>
+          <q-avatar v-if="user.photoURL">
             <img :src="user.photoURL" />
           </q-avatar>
-          <span>{{ user.displayName }}</span>
+          <span v-if="user.displayName">{{ user.displayName }}</span>
+          <span v-else-if="user.email">{{ user.email }}</span>
         </div>
         <div class="row justify-center q-mt-md q-mb-lg">
           <q-btn color="primary" label="Log Out" @click="signOut" />

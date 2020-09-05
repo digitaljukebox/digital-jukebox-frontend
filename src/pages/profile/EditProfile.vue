@@ -2,11 +2,19 @@
   <q-page padding>
     <div class="row justify-center">
       <q-img
+        v-if="user.photoURL"
         :src="user.photoURL"
         spinner-color="white"
         style="height: 200px; max-width: 200px;"
         class="q-ma-lg"
       />
+      <div
+        v-else
+        style="height: 200px; width: 200px;"
+        class="bg-blue-grey-5 q-ma-lg row justify-center items-center"
+      >
+        <p class="text-white">No Profile Picture</p>
+      </div>
     </div>
 
     <div>
@@ -198,7 +206,6 @@ export default {
         }
 
         // check if email has update
-        // TODO: add email verification?
         if (this.firebaseUser.email !== this.user.email) {
           if (this.user.email === '') {
             alert('Cant remove email');
