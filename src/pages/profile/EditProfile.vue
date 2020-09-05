@@ -23,6 +23,8 @@
           @click="chooseImage"
           label="choose a new photo"
           :loading="uploadingImage"
+          :percentage="uploadValue"
+          color="secondary"
         />
         <input
           type="file"
@@ -109,7 +111,8 @@ export default {
       saving: false,
       imageData: null,
       image: null,
-      uploadingImage: false
+      uploadingImage: false,
+      uploadValue: 0
     };
   },
   async created() {
@@ -163,6 +166,7 @@ export default {
           storageRef.snapshot.ref.getDownloadURL().then(url => {
             this.user.photoURL = url;
             this.uploadingImage = false;
+            this.uploadValue = 0;
           });
         }
       );

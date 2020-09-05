@@ -3,7 +3,13 @@
     <div class="row justify-center"><h4>Your Venues</h4></div>
     <div class="row justify-center">
       <q-list bordered separator style="max-width: 500px; flex:1">
-        <q-item clickable v-ripple v-for="venue in venues" :key="venue.id">
+        <q-item
+          clickable
+          v-ripple
+          v-for="venue in venues"
+          :key="venue.id"
+          @click="navigateToEditPage(venue.id)"
+        >
           <q-item-section>
             <q-item-label>{{ venue.name }}</q-item-label>
           </q-item-section>
@@ -43,10 +49,17 @@ export default {
           .where('manager', '==', user.uid)
           .onSnapshot(querySnapshot => {
             this.venues = [];
-            querySnapshot.forEach(doc => this.venues.push(doc.data()));
+            querySnapshot.forEach(doc =>
+              this.venues.push({ ...doc.data(), id: doc.id })
+            );
           });
       }
     });
+  },
+  methods: {
+    navigateToEditPage(venueId) {
+      this.$router.push(`/manage-venues/${venueId}`);
+    }
   }
 };
 </script>
