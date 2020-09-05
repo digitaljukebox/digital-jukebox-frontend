@@ -1,8 +1,9 @@
 import { RouteConfig } from 'vue-router';
 
 const routes: RouteConfig[] = [
+  { path: '/', redirect: '/home' },
   {
-    path: '/',
+    path: '/home',
     meta: {
       auth: true
     },

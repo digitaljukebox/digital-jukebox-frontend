@@ -21,6 +21,7 @@
       show-if-above
       bordered
       content-class="bg-grey-1"
+      content-style="display: flex;flex-direction: column;"
     >
       <template v-if="user">
         <q-list>
@@ -30,7 +31,15 @@
             v-bind="link"
           />
         </q-list>
-        <div class="row justify-center q-mt-lg">
+        <div class="row" style="flex-grow: 1"></div>
+        <q-separator />
+        <div class="row justify-center q-mt-sm items-center q-gutter-md">
+          <q-avatar>
+            <img :src="user.photoURL" />
+          </q-avatar>
+          <span>{{ user.displayName }}</span>
+        </div>
+        <div class="row justify-center q-mt-md q-mb-lg">
           <q-btn color="primary" label="Log Out" @click="signOut" />
         </div>
       </template>
@@ -56,7 +65,7 @@ const linksData = [
   {
     title: 'Home',
     icon: 'fas fa-home',
-    link: '/'
+    link: '/home'
   },
   {
     title: 'Nearby Venues',
@@ -93,8 +102,7 @@ export default defineComponent({
     });
   },
   methods: {
-    signOut(e) {
-      e.stopPropagation();
+    signOut() {
       firebase.auth().signOut();
       this.$router.push('/login');
     }

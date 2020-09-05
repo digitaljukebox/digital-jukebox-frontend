@@ -17,7 +17,7 @@
           <template v-slot:append>
             <q-icon
               name="fas fa-times-circle"
-              @click="text = ''"
+              @click="user.displayName = ''"
               class="cursor-pointer"
               color="grey"
             />
@@ -27,12 +27,15 @@
           <template v-slot:prepend>
             <q-icon name="fas fa-envelope" />
           </template>
-        </q-input>
-        <!-- <q-input label="Phone Number" v-model="user.phoneNumber">
-          <template v-slot:prepend>
-            <q-icon name="fas fa-phone" />
+          <template v-slot:append>
+            <q-icon
+              name="fas fa-times-circle"
+              @click="user.email = ''"
+              class="cursor-pointer"
+              color="grey"
+            />
           </template>
-        </q-input> -->
+        </q-input>
         <vue-phone-number-input
           v-model="user.phoneNumber"
           @update="
@@ -111,29 +114,40 @@ export default {
           }
 
           if (this.formattedNumber === '') {
-            alert('cannot remove phone number');
+            alert('cant remove phone number');
+            this.user.phoneNumber = this.firebaseUser.phoneNumber;
             this.saving = false;
             return;
           }
+
           const provider = new firebase.auth.PhoneAuthProvider();
           const verificationId = await provider.verifyPhoneNumber(
             this.formattedNumber,
             this.appVerifier
           );
+
           const verificationCode = window.prompt(
             'Please enter the verification ' +
               'code that was sent to your mobile device.'
           );
+
           const phoneCredential = firebase.auth.PhoneAuthProvider.credential(
             verificationId,
             verificationCode
           );
-          this.firebaseUser.updatePhoneNumber(phoneCredential);
+
+          await this.firebaseUser.updatePhoneNumber(phoneCredential);
         }
 
         // check if email has update
         // TODO: add email verification?
         if (this.firebaseUser.email !== this.user.email) {
+          if (this.user.email === '') {
+            alert('Cant remove email');
+            this.user.email = this.firebaseUser.email;
+            this.saving = false;
+            return;
+          }
           await this.firebaseUser.updateEmail(this.user.email);
         }
 
