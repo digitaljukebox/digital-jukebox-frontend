@@ -184,7 +184,8 @@ export default {
       imageData: null,
       uploadingImage: null,
       uploadValue: 0,
-      user: null
+      user: null,
+      venueId: null
     };
   },
   created() {
@@ -195,9 +196,9 @@ export default {
     });
   },
   mounted() {
-    const venueId = this.$route.params.id;
+    this.venueId = this.$route.params.id;
     db.collection('venues')
-      .doc(venueId)
+      .doc(this.venueId)
       .get()
       .then(doc => {
         let data = doc.data() as any;
@@ -227,7 +228,7 @@ export default {
     },
     saveVenue() {
       db.collection('venues')
-        .doc(`${v4()}`)
+        .doc(this.venueId ?? `${v4()}`)
         .set({ ...this.venue, manager: this.user.uid })
         .then(() => this.$router.push('/manage-venues'));
     },
