@@ -12,9 +12,12 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@quasar/cli": "^1.1.0",
     "@quasar/extras": "^1.9.4",
+    "@trevoreyre/autocomplete-vue": "^2.2.0",
     "@vue/composition-api": "^0.6.4",
     "axios": "^0.18.1",
+    "client-oauth2": "^4.3.3",
     "core-js": "^3.6.5",
     "firebase": "^7.19.0",
     "firebaseui": "^4.6.1",
