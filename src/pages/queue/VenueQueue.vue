@@ -1,20 +1,38 @@
 <template>
   <div>
     <div v-if="!loading && venue">
-      <q-img :src="venue.photoURL" spinner-color="white" />
       <h4 class="text">{{ venue.name }}</h4>
 
       <p>
-        <autocomplete :search="searchSong" debounceTime="300"></autocomplete>
+        <autocomplete
+          :search="searchSong"
+          :debounceTime="300"
+          @submit="addToQueue"
+        >
+          <template #result="{ result, props }">
+            <q-item clickable v-ripple @click="addToQueue(result)">
+              <q-item-section avatar>
+                <q-avatar>
+                  <img :src="result.album.images[0].url" />
+                </q-avatar>
+              </q-item-section>
+              <q-item-section
+                >{{ result.name }} {{ result.artists[0].name }}</q-item-section
+              >
+            </q-item>
+          </template>
+        </autocomplete>
       </p>
       <q-list bordered>
-        <q-item clickable v-ripple>
+        <q-item clickable v-ripple v-for="song in songQueue" :key="song.name">
           <q-item-section avatar>
-            <q-avatar rounded>
-              <img src="https://cdn.quasar.dev/img/mountains.jpg" />
+            <q-avatar>
+              <img :src="song.album.images[0].url" />
             </q-avatar>
           </q-item-section>
-          <q-item-section>List item</q-item-section>
+          <q-item-section
+            >{{ song.name }} {{ song.artists[0].name }}</q-item-section
+          >
         </q-item>
       </q-list>
     </div>
@@ -31,11 +49,15 @@
 </style>
 
 <script lang="ts">
+import { defineComponent, ref } from '@vue/composition-api';
 import Error404 from '../Error404.vue';
 import Autocomplete from '@trevoreyre/autocomplete-vue';
 import '@trevoreyre/autocomplete-vue/dist/style.css';
+import axios from 'axios';
+import { Notify } from 'quasar';
+import { mapGetters } from 'vuex';
 
-export default {
+export default defineComponent({
   name: 'VenueInfo',
   components: {
     Error404,
@@ -50,9 +72,34 @@ export default {
       songSuggestions: []
     };
   },
+  computed: {
+    ...mapGetters('spotify', ['isSpotifyLogin', 'getSpotifyAuth'])
+  },
   methods: {
     searchSong(input) {
-      return [];
+      if (input === '') {
+        return [];
+      }
+
+      const url = new URL('https://api.spotify.com/v1/search');
+      url.searchParams.append('q', input);
+      url.searchParams.append('type', 'track');
+
+      const AuthStr = 'Bearer '.concat(this.getSpotifyAuth.accessToken);
+      return axios
+        .get(url.toString(), {
+          headers: {
+            Authorization: AuthStr
+          }
+        })
+        .then(response => response.data)
+        .then(data => {
+          return data.tracks.items;
+        });
+    },
+    addToQueue(result) {
+      this.$data.songQueue.push(result);
+      Notify.create(result.name + ' added to the queue!');
     }
   },
   mounted() {
@@ -78,5 +125,5 @@ export default {
         console.log('Error getting document:', error);
       });
   }
-};
+});
 </script>

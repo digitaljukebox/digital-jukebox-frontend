@@ -5,6 +5,14 @@
       <h4 class="text">{{ venue.name }}</h4>
       <p class="text">{{ venue.description }}</p>
       <p class="text">Address: {{ venue.address }}</p>
+      <p class="text" style="padding-top:15px" v-if="isSpotifyLogin">
+        <q-btn
+          @click="navigateToQueuePage()"
+          color="white"
+          text-color="black"
+          label="View Queue"
+        />
+      </p>
     </div>
     <div v-else-if="!loading && !venue">
       <error404></error404>
@@ -19,9 +27,11 @@
 </style>
 
 <script lang="ts">
+import { defineComponent, ref } from '@vue/composition-api';
 import Error404 from './Error404.vue';
+import { mapGetters } from 'vuex';
 
-export default {
+export default defineComponent({
   name: 'VenueInfo',
   components: {
     Error404
@@ -29,14 +39,23 @@ export default {
   data() {
     return {
       loading: true,
-      venue: null
+      venue: null,
+      venueId: null
     };
+  },
+  methods: {
+    navigateToQueuePage() {
+      this.$router.push(`/venue/${this.venueId}/queue`);
+    }
+  },
+  computed: {
+    ...mapGetters('spotify', ['isSpotifyLogin'])
   },
   mounted() {
     const venueId = this.$route.params.id;
     const db = this.$fb.getFirestore();
     const docRef = db.collection('venues').doc(venueId);
-
+    this.venueId = venueId;
     let _this = this;
     docRef
       .get()
@@ -55,5 +74,5 @@ export default {
         console.log('Error getting document:', error);
       });
   }
-};
+});
 </script>

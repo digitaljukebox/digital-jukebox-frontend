@@ -47,7 +47,10 @@ const routes: RouteConfig[] = [
       },
       {
         path: 'queue',
-        component: () => import('pages/queue/VenueQueue.vue')
+        component: () => import('pages/queue/VenueQueue.vue'),
+        meta: {
+          spotifyAuth: true
+        }
       }
     ]
   },

@@ -157,12 +157,13 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref } from '@vue/composition-api';
 import firebase from 'firebase';
 import 'firebase/firestore';
 const db = firebase.firestore();
 import { v4 } from 'uuid';
 
-export default {
+export default defineComponent({
   name: 'CreateVenue',
   data() {
     return {
@@ -270,5 +271,5 @@ export default {
       );
     }
   }
-};
+});
 </script>
