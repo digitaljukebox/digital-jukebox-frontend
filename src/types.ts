@@ -47,7 +47,20 @@ export interface Venue {
   description: string;
   location: NCoordinates;
   photoURL: string; // display photo
+
+export interface SpotifyAuth {
+  accessToken: string;
+  tokenType: string;
+  expiresIn: Number;
+  state: string;
 }
+
+export interface SpotifyUser {
+  displayName: string | null;
+  image: string | null;
+}
+
+export type Dictionary<T> = { [key: string]: T };
 
 export function venueFromFirestoreDocument(
   doc: firebase.firestore.QueryDocumentSnapshot
