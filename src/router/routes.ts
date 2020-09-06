@@ -44,6 +44,10 @@ const routes: RouteConfig[] = [
       {
         path: '',
         component: () => import('pages/VenueInfo.vue')
+      },
+      {
+        path: 'queue',
+        component: () => import('pages/queue/VenueQueue.vue')
       }
     ]
   },

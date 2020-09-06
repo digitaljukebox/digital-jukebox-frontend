@@ -30,6 +30,15 @@
             :key="link.title"
             v-bind="link"
           />
+          <q-item clickable @click="toSpotifyAuth" v-if="!loggedInToSpotify">
+            <q-item-section avatar>
+              <q-icon name="fab fa-spotify" />
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>Connect with Spotify</q-item-label>
+            </q-item-section>
+          </q-item>
         </q-list>
         <div class="row" style="flex-grow: 1"></div>
         <q-separator />
@@ -39,6 +48,17 @@
           </q-avatar>
           <span v-if="user.displayName">{{ user.displayName }}</span>
           <span v-else-if="user.email">{{ user.email }}</span>
+        </div>
+        <div
+          class="row justify-center q-mt-sm items-center q-gutter-md"
+          v-if="spotifyUser"
+        >
+          <q-avatar>
+            <q-icon name="fab fa-spotify" />
+          </q-avatar>
+          <span v-if="spotifyUser.displayName">{{
+            spotifyUser.displayName
+          }}</span>
         </div>
         <div class="row justify-center q-mt-md q-mb-lg">
           <q-btn color="primary" label="Log Out" @click="signOut" />
@@ -87,6 +107,11 @@ const linksData = [
 
 import { defineComponent, ref } from '@vue/composition-api';
 import firebase from 'firebase';
+import { getSpotifyOAuthAuthURI } from 'src/services/firebase/spotify';
+import { toSpotifySignIn } from '../services/firebase/spotify';
+import { mapGetters } from 'vuex';
+import axios from 'axios';
+import { SpotifyUser } from '../types';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -99,7 +124,8 @@ export default defineComponent({
   },
   data() {
     return {
-      user: null
+      user: null,
+      spotifyUser: null as SpotifyUser
     };
   },
   created() {
@@ -107,10 +133,54 @@ export default defineComponent({
       this.user = user;
     });
   },
+  computed: {
+    ...mapGetters('spotify', ['isSpotifyLogin', 'getSpotifyAuth']),
+    loggedInToSpotify() {
+      return this.isSpotifyLogin;
+    }
+  },
+  mounted() {
+    if (this.loggedInToSpotify) {
+      this.setSpotifyUser();
+    }
+  },
+  watch: {
+    loggedInToSpotify(val) {
+      if (val) {
+        this.setSpotifyUser();
+      }
+    }
+  },
   methods: {
     signOut() {
       firebase.auth().signOut();
       this.$router.push('/login');
+    },
+    toSpotifyAuth() {
+      toSpotifySignIn();
+    },
+    setSpotifyUser() {
+      const AuthStr = 'Bearer '.concat(this.getSpotifyAuth.accessToken);
+      axios
+        .get('https://api.spotify.com/v1/me', {
+          headers: {
+            Authorization: AuthStr
+          }
+        })
+        .then(response => response.data)
+        .then(data => {
+          let image = null;
+          if (data.images.length > 0) {
+            image = data.images[0].url;
+          }
+
+          const user = {
+            displayName: data.display_name,
+            image
+          };
+
+          this.$data.spotifyUser = user;
+        });
     }
   }
 });

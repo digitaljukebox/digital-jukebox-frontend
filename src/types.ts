@@ -47,6 +47,7 @@ export interface Venue {
   description: string;
   location: NCoordinates;
   photoURL: string; // display photo
+}
 
 export interface SpotifyAuth {
   accessToken: string;
