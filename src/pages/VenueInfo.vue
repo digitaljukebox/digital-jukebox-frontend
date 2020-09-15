@@ -27,9 +27,13 @@
 </style>
 
 <script lang="ts">
+import { VenueProfileView } from 'src/types.ts';
 import { defineComponent, ref } from '@vue/composition-api';
+import firebase from 'firebase';
 import Error404 from './Error404.vue';
 import { mapGetters } from 'vuex';
+import { v4 } from 'uuid';
+const db = firebase.firestore();
 
 export default defineComponent({
   name: 'VenueInfo',
@@ -46,33 +50,62 @@ export default defineComponent({
   methods: {
     navigateToQueuePage() {
       this.$router.push(`/venue/${this.venueId}/queue`);
+    },
+    initVenue() {
+      const docRef = db.collection('venues').doc(this.venueId);
+      let _this = this;
+      docRef
+        .get()
+        .then(function(doc: firebase.firestore.DocumentSnapshot) {
+          if (doc.exists) {
+            console.log('Document data:', doc.data());
+            _this.venue = doc.data();
+            _this.loading = false;
+            _this.logProfileView();
+          } else {
+            // doc.data() will be undefined in this case. this will render a 404 error
+            console.log('No such document!');
+            _this.loading = false;
+          }
+        })
+        .catch(function(error: Error) {
+          console.log('Error getting document:', error);
+        });
+    },
+    logProfileView() {
+      let _this = this;
+      console.log(_this.venue)
+      firebase.auth().onAuthStateChanged(function(user) {
+        let view: VenueProfileView;
+        if (user) {
+          // User is signed in.
+          view = {
+            venueId: _this.venueId,
+            userId: user.uid,
+            timestamp: new Date(),
+          };
+          console.log(view);
+        } else {
+          // No user is signed in.
+          view = {
+            venueId: _this.venueId,
+            userId: '',
+            timestamp: new Date(),
+          }
+        }
+        db.collection('venueprofileviews')
+          .doc(`${v4()}`)
+          .set(view)
+      });
     }
   },
   computed: {
     ...mapGetters('spotify', ['isSpotifyLogin'])
   },
   mounted() {
-    const venueId = this.$route.params.id;
-    const db = this.$fb.getFirestore();
-    const docRef = db.collection('venues').doc(venueId);
-    this.venueId = venueId;
-    let _this = this;
-    docRef
-      .get()
-      .then(function(doc: firebase.firestore.DocumentSnapshot) {
-        if (doc.exists) {
-          console.log('Document data:', doc.data());
-          _this.venue = doc.data();
-          _this.loading = false;
-        } else {
-          // doc.data() will be undefined in this case. this will render a 404 error
-          console.log('No such document!');
-          _this.loading = false;
-        }
-      })
-      .catch(function(error: Error) {
-        console.log('Error getting document:', error);
-      });
+    this.venueId = this.$route.params.id;
+    this.initVenue();
   }
+    
 });
 </script>

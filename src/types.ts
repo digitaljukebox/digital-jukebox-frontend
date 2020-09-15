@@ -52,13 +52,19 @@ export interface Venue {
 export interface SpotifyAuth {
   accessToken: string;
   tokenType: string;
-  expiresIn: Number;
+  expiresIn: number;
   state: string;
 }
 
 export interface SpotifyUser {
   displayName: string | null;
   image: string | null;
+}
+
+export type VenueProfileView = {
+  venueId: string;
+  userId: string; // will be an empty string if user wasn't logged in when viewing the venue.
+  timestamp: Date;
 }
 
 export type Dictionary<T> = { [key: string]: T };
