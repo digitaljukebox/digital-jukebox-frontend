@@ -17,6 +17,7 @@
     "@trevoreyre/autocomplete-vue": "^2.2.0",
     "@vue/composition-api": "^0.6.4",
     "axios": "^0.18.1",
+    "chart.js": "^2.9.3",
     "client-oauth2": "^4.3.3",
     "core-js": "^3.6.5",
     "firebase": "^7.19.0",

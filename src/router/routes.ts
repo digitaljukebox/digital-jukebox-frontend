@@ -93,6 +93,10 @@ const routes: RouteConfig[] = [
       {
         path: ':id/edit',
         component: () => import('pages/venueManagement/CreateEditVenue.vue')
+      },
+      {
+        path: 'dashboard/:id',
+        component: () => import('pages/venueManagement/VenueDashboard.vue')
       }
     ]
   },

@@ -2,13 +2,16 @@
   <q-page padding>
     <h3>Venue Details</h3>
     <p>Details about your venue</p>
-    <p>Numbers of users, etc.?</p>
-    <div class="row"><q-btn label="Ban Lists?" /></div>
     <div class="row q-mt-lg">
       <q-btn
         color="primary"
         label="Edit Venue Details"
         @click="navigateToEditPage"
+      />
+      <q-btn
+        color="primary"
+        label="Venue Data"
+        @click="navigateToDashboardPage"
       />
     </div>
   </q-page>
@@ -28,6 +31,9 @@ export default {
   methods: {
     navigateToEditPage() {
       this.$router.push(`/manage-venues/${this.venueId}/edit`);
+    },
+    navigateToDashboardPage() {
+      this.$router.push(`/manage-venues/dashboard/${this.venueId}`);
     }
   }
 };
