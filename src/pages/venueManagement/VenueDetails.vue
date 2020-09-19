@@ -34,7 +34,7 @@
           <div>
             <div class="text-h4">Song Name</div>
             <div class="text-h5">Artist Name</div>
-            <div class="text-subtitle1">Request By: Aidan K.</div>
+            <div class="text-subtitle1">Requested By: Aidan K.</div>
           </div>
 
           <q-card-actions>
@@ -68,11 +68,11 @@
             <q-item-section>
               <q-item-label>{{ element.name }}</q-item-label>
               <q-item-label caption lines="1">Artist Name</q-item-label>
-              <q-item-label caption lines="1">2:56</q-item-label>
+              <q-item-label caption lines="1">2:56 mins</q-item-label>
             </q-item-section>
 
             <q-item-section>
-              <q-item-label caption>Submitted By Aidan K.</q-item-label>
+              <q-item-label caption>Requested By: Aidan K.</q-item-label>
             </q-item-section>
 
             <q-item-section side>
