@@ -17,7 +17,10 @@ const routes: RouteConfig[] = [
       {
         path: '',
         name: 'Login',
-        component: () => import('pages/Auth.vue')
+        component: () => import('pages/Auth.vue'),
+        meta: {
+          pageName: 'Login'
+        }
       }
     ]
   },
@@ -30,7 +33,10 @@ const routes: RouteConfig[] = [
     children: [
       {
         path: '',
-        component: () => import('pages/NearbyVenues.vue')
+        component: () => import('pages/NearbyVenues.vue'),
+        meta: {
+          pageName: 'Nearby Venues'
+        }
       }
     ]
   },
@@ -43,13 +49,17 @@ const routes: RouteConfig[] = [
     children: [
       {
         path: '',
-        component: () => import('pages/VenueInfo.vue')
+        component: () => import('pages/VenueInfo.vue'),
+        meta: {
+          pageName: 'Venue Info'
+        }
       },
       {
         path: 'queue',
         component: () => import('pages/queue/VenueQueue.vue'),
         meta: {
-          spotifyAuth: true
+          spotifyAuth: true,
+          pageName: 'Venue Queue'
         }
       }
     ]
@@ -63,11 +73,17 @@ const routes: RouteConfig[] = [
     children: [
       {
         path: '',
-        component: () => import('pages/profile/UserProfile.vue')
+        component: () => import('pages/profile/UserProfile.vue'),
+        meta: {
+          pageName: 'Profile'
+        }
       },
       {
         path: 'edit',
-        component: () => import('pages/profile/EditProfile.vue')
+        component: () => import('pages/profile/EditProfile.vue'),
+        meta: {
+          pageName: 'Edit Profile'
+        }
       }
     ]
   },
@@ -80,23 +96,48 @@ const routes: RouteConfig[] = [
     children: [
       {
         path: '',
-        component: () => import('pages/venueManagement/ManageVenues.vue')
+        component: () => import('pages/venueManagement/ManageVenues.vue'),
+        meta: {
+          pageName: 'Manage Venues'
+        }
       },
       {
         path: 'create',
-        component: () => import('pages/venueManagement/CreateEditVenue.vue')
+        component: () => import('pages/venueManagement/CreateEditVenue.vue'),
+        meta: {
+          pageName: 'Create Venue'
+        }
       },
       {
         path: ':id',
-        component: () => import('pages/venueManagement/VenueDetails.vue')
+        component: () => import('pages/venueManagement/VenueDetails.vue'),
+        name: 'Venue Details',
+        meta: {
+          pageName: 'Venue Details'
+        }
       },
       {
         path: ':id/edit',
-        component: () => import('pages/venueManagement/CreateEditVenue.vue')
+        component: () => import('pages/venueManagement/CreateEditVenue.vue'),
+        name: 'Edit Venue',
+        meta: {
+          pageName: 'Edit Venue'
+        }
+      },
+      {
+        path: ':id/allow-deny',
+        component: () => import('pages/venueManagement/AllowDenyPage.vue'),
+        name: 'Allow/Deny List',
+        meta: {
+          pageName: 'Allow/Deny List'
+        }
       },
       {
         path: 'dashboard/:id',
-        component: () => import('pages/venueManagement/VenueDashboard.vue')
+        component: () => import('pages/venueManagement/VenueDashboard.vue'),
+        meta: {
+          pageName: 'Venue Dashboard'
+        }
       }
     ]
   },
@@ -105,7 +146,10 @@ const routes: RouteConfig[] = [
   // but you can also remove it
   {
     path: '*',
-    component: () => import('pages/Error404.vue')
+    component: () => import('pages/Error404.vue'),
+    meta: {
+      pageName: 'Page Not Found (Error 404)'
+    }
   }
 ];
 

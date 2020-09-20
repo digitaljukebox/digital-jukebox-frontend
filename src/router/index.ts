@@ -60,5 +60,9 @@ export default route(function({ Vue }) {
     }
   });
 
+  Router.afterEach((to) => {
+    document.title = to.meta.pageName ? to.meta.pageName + ' | Digital Jukebox' : 'Digital Jukebox';
+  });
+
   return Router;
 });
