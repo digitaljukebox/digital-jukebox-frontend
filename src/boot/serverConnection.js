@@ -1,6 +1,6 @@
 import firebaseService from '../services/firebase';
 
-export default ({ Vue }: { Vue: Vue }) => {
+export default ({ Vue }) => {
   const config = {
     apiKey: 'AIzaSyAu3v71qDLKEEF4QCpOezDfnJlBMXv3Kno',
     authDomain: 'digital-jukebox.firebaseapp.com',

@@ -79,7 +79,7 @@
   </q-layout>
 </template>
 
-<script lang="ts">
+<script>
 import EssentialLink from 'components/EssentialLink.vue';
 
 const linksData = [
@@ -125,7 +125,7 @@ export default defineComponent({
   data() {
     return {
       user: null,
-      spotifyUser: null as SpotifyUser
+      spotifyUser: null
     };
   },
   created() {

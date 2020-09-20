@@ -47,7 +47,7 @@
   </q-page>
 </template>
 
-<script lang="ts">
+<script>
 import { Todo, Meta } from 'components/models';
 import { defineComponent, ref } from '@vue/composition-api';
 

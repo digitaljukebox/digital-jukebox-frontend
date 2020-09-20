@@ -8,7 +8,7 @@
   </q-page>
 </template>
 
-<script lang="ts">
+<script>
 import firebase, { auth } from 'firebase';
 import * as firebaseui from 'firebaseui';
 import 'firebaseui/dist/firebaseui.css';
@@ -32,7 +32,7 @@ export default {
       ui = new firebaseui.auth.AuthUI(firebase.auth());
     }
 
-    const uiConfig: firebaseui.auth.Config = {
+    const uiConfig = {
       callbacks: {
         signInSuccessWithAuthResult: () => {
           this.$router.push('/');

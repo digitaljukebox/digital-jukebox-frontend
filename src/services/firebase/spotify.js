@@ -1,7 +1,4 @@
 import store from '../../store';
-import { route } from 'quasar/wrappers';
-import { RouteParams } from '@quasar/app';
-import { Dictionary, SpotifyAuth } from '../../types';
 import ClientOAuth2 from 'client-oauth2';
 
 const redirectUri = `http://localhost:8080/spotify-callback`;
@@ -17,14 +14,14 @@ const spotifyOAuth = new ClientOAuth2({
   scopes: []
 });
 
-export function getSpotifyOAuthAuthURI(): string {
+export function getSpotifyOAuthAuthURI() {
   return spotifyOAuth.token.getUri();
 }
 
-export function spotifyCallbackRoute(hash: string) {
+export function spotifyCallbackRoute(hash) {
   const params = hash.split('&').map(part => part.replace(/#/, ''));
 
-  const parsedParams: Dictionary<string | string> = {};
+  const parsedParams = {};
 
   params.forEach(param => {
     const parts = param.split('=');
