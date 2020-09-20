@@ -56,10 +56,11 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import firebase from 'firebase';
 import 'firebase/firestore';
 import Chart from 'chart.js';
+import { VenueProfileView } from 'src/types';
 
 const db = firebase.firestore();
 
@@ -77,13 +78,14 @@ export default {
   },
   methods: {
     initProfileViewsChart() {
+      let _this = this;
       db.collection('venueprofileviews').onSnapshot(querySnapshot => {
-        const venueProfileViews = [];
+        const venueProfileViews: VenueProfileView[] = [];
 
         querySnapshot.forEach(doc => {
           let data = doc.data();
-          if (data.venueId == this.venueId) {
-            let profileView = {
+          if (data.venueId == _this.venueId) {
+            let profileView: VenueProfileView = {
               venueId: data.venueId,
               userId: data.userId,
               timestamp: data.timestamp.toDate()
@@ -92,7 +94,11 @@ export default {
           }
         });
 
-        let viewsPerDay = {};
+        type viewsBucket = {
+          [key: string]: number;
+        };
+
+        let viewsPerDay: viewsBucket = {};
         for (let i = 0; i < venueProfileViews.length; i++) {
           let view = venueProfileViews[i];
           let dateString = view.timestamp.toDateString();

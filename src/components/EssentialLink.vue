@@ -1,6 +1,12 @@
 <template>
-  <q-item clickable :to="link">
-    <q-item-section v-if="icon" avatar>
+  <q-item
+   clickable
+   :to="link"
+  >
+    <q-item-section
+      v-if="icon"
+      avatar
+    >
       <q-icon :name="icon" />
     </q-item-section>
 
@@ -13,7 +19,7 @@
   </q-item>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 
 export default defineComponent({

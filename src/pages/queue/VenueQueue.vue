@@ -9,7 +9,7 @@
           :debounceTime="300"
           @submit="addToQueue"
         >
-          <template #result="{ result }">
+          <template #result="{ result, props }">
             <q-item clickable v-ripple @click="addToQueue(result)">
               <q-item-section avatar>
                 <q-avatar>
@@ -48,8 +48,8 @@
 }
 </style>
 
-<script>
-import { defineComponent } from '@vue/composition-api';
+<script lang="ts">
+import { defineComponent, ref } from '@vue/composition-api';
 import Error404 from '../Error404.vue';
 import Autocomplete from '@trevoreyre/autocomplete-vue';
 import '@trevoreyre/autocomplete-vue/dist/style.css';
@@ -107,20 +107,21 @@ export default defineComponent({
     const db = this.$fb.getFirestore();
     const docRef = db.collection('venues').doc(venueId);
 
+    let _this = this;
     docRef
       .get()
-      .then(doc => {
+      .then(function(doc: firebase.firestore.DocumentSnapshot) {
         if (doc.exists) {
           console.log('Document data:', doc.data());
-          this.venue = doc.data();
-          this.loading = false;
+          _this.venue = doc.data();
+          _this.loading = false;
         } else {
           // doc.data() will be undefined in this case. this will render a 404 error
           console.log('No such document!');
-          this.loading = false;
+          _this.loading = false;
         }
       })
-      .catch(function(error) {
+      .catch(function(error: Error) {
         console.log('Error getting document:', error);
       });
   }

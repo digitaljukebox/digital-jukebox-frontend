@@ -156,7 +156,7 @@
   </q-page>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
 import firebase from 'firebase';
 import 'firebase/firestore';
@@ -202,7 +202,7 @@ export default defineComponent({
       .doc(this.venueId)
       .get()
       .then(doc => {
-        let data = doc.data();
+        let data = doc.data() as any;
         this.venue = { ...data, location: { ...data.location } };
         console.log(data);
 
@@ -229,7 +229,7 @@ export default defineComponent({
     },
     saveVenue() {
       db.collection('venues')
-        .doc(this.venueId ? this.venueId : `${v4()}`)
+        .doc(this.venueId ?? `${v4()}`)
         .set({ ...this.venue, manager: this.user.uid })
         .then(() => this.$router.push('/manage-venues'));
     },

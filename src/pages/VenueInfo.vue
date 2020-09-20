@@ -26,9 +26,9 @@
 }
 </style>
 
-<script>
+<script lang="ts">
 import { VenueProfileView } from 'src/types.ts';
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, ref } from '@vue/composition-api';
 import firebase from 'firebase';
 import Error404 from './Error404.vue';
 import { mapGetters } from 'vuex';
@@ -53,46 +53,49 @@ export default defineComponent({
     },
     initVenue() {
       const docRef = db.collection('venues').doc(this.venueId);
+      let _this = this;
       docRef
         .get()
-        .then(doc => {
+        .then(function(doc: firebase.firestore.DocumentSnapshot) {
           if (doc.exists) {
             console.log('Document data:', doc.data());
-            this.venue = doc.data();
-            this.loading = false;
-            this.logProfileView();
+            _this.venue = doc.data();
+            _this.loading = false;
+            _this.logProfileView();
           } else {
             // doc.data() will be undefined in this case. this will render a 404 error
             console.log('No such document!');
-            this.loading = false;
+            _this.loading = false;
           }
         })
-        .catch(function(error) {
+        .catch(function(error: Error) {
           console.log('Error getting document:', error);
         });
     },
     logProfileView() {
-      firebase.auth().onAuthStateChanged(user => {
-        let view;
+      let _this = this;
+      console.log(_this.venue)
+      firebase.auth().onAuthStateChanged(function(user) {
+        let view: VenueProfileView;
         if (user) {
           // User is signed in.
           view = {
-            venueId: this.venueId,
+            venueId: _this.venueId,
             userId: user.uid,
-            timestamp: new Date()
+            timestamp: new Date(),
           };
           console.log(view);
         } else {
           // No user is signed in.
           view = {
-            venueId: this.venueId,
+            venueId: _this.venueId,
             userId: '',
-            timestamp: new Date()
-          };
+            timestamp: new Date(),
+          }
         }
         db.collection('venueprofileviews')
           .doc(`${v4()}`)
-          .set(view);
+          .set(view)
       });
     }
   },
@@ -103,5 +106,6 @@ export default defineComponent({
     this.venueId = this.$route.params.id;
     this.initVenue();
   }
+    
 });
 </script>

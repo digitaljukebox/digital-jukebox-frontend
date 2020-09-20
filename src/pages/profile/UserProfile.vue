@@ -56,7 +56,7 @@
   </q-page>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue';
 import firebase from 'firebase';
 import 'firebase/firestore';

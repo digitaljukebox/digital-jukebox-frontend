@@ -35,7 +35,7 @@
 
 <style scoped></style>
 
-<script>
+<script lang="ts">
 import { NCoordinates, Venue, venueFromFirestoreDocument } from 'src/types.ts';
 import firebase from 'firebase';
 import 'firebase/firestore';
@@ -44,7 +44,11 @@ const db = firebase.firestore();
 export default {
   name: 'NearbyVenues',
   data() {
-    const d = {
+    const d: {
+      tab: string;
+      venues: Venue[];
+      userLocation: NCoordinates;
+    } = {
       tab: 'list',
       venues: [],
       userLocation: null
@@ -63,9 +67,9 @@ export default {
           this.venues.push(venueFromFirestoreDocument(doc))
         );
 
-        this.venues.sort((a, b) => {
-          let distA = this.userLocation.distanceTo(a.location);
-          let distB = this.userLocation.distanceTo(b.location);
+        this.venues.sort((a: Venue, b: Venue) => {
+          let distA: number = this.userLocation.distanceTo(a.location);
+          let distB: number = this.userLocation.distanceTo(b.location);
           return distA - distB;
         });
       });
@@ -78,9 +82,9 @@ export default {
         );
       });
     },
-    getVenueDistance: function(venueLocation) {
+    getVenueDistance: function(venueLocation: NCoordinates): string {
       if (this.userLocation) {
-        const distance = this.userLocation.distanceTo(venueLocation);
+        const distance: number = this.userLocation.distanceTo(venueLocation);
         let units = 'km';
         if (distance < 1) {
           units = 'm';
@@ -90,11 +94,12 @@ export default {
         return '????';
       }
     },
-    navigateToInfoPage(venueId) {
+    navigateToInfoPage(venueId: string) {
       this.$router.push(`/venue/${venueId}`);
     }
   },
   mounted() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     this.getUserLocation();
 
     this.updateVenues();
