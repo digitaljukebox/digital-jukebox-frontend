@@ -97,11 +97,6 @@
         label="Venue Metrics"
         @click="navigateToDashboardPage"
       />
-      <q-btn
-        color="primary"
-        label="Allow/Deny List"
-        :to="{name: 'Allow/Deny List'}"
-      />
     </div>
   </q-page>
 </template>
