@@ -1,3 +1,4 @@
+import { Data } from 'client-oauth2';
 import firebase from 'firebase';
 export class NCoordinates {
   latitude: number;
@@ -65,7 +66,13 @@ export type VenueProfileView = {
   venueId: string;
   userId: string; // will be an empty string if user wasn't logged in when viewing the venue.
   timestamp: Date;
-}
+};
+
+export type VenueCheckIn = {
+  venueId: string;
+  userId: string;
+  timeStamp: Date;
+};
 
 export type Dictionary<T> = { [key: string]: T };
 

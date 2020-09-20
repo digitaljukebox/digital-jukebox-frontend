@@ -53,10 +53,12 @@ import Vue from 'vue';
 import { defineComponent, ref } from '@vue/composition-api';
 import Error404 from '../Error404.vue';
 import axios from 'axios';
+import { v4 } from 'uuid';
 import { Notify } from 'quasar';
 import { mapGetters } from 'vuex';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
+import firebase from 'firebase';
 import Autocomplete from '@trevoreyre/autocomplete-vue';
 import '@trevoreyre/autocomplete-vue/dist/style.css';
 
@@ -128,6 +130,18 @@ export default defineComponent({
       .catch(function(error) {
         console.log('Error getting document:', error);
       });
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        let checkIn = {
+          venueId,
+          userId: user.uid,
+          timeStamp: new Date()
+        }
+        db.collection('venuecheckins').doc(`${v4()}`).set(checkIn);
+      }
+    });
+
   }
 });
 </script>
