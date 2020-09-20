@@ -1,4 +1,3 @@
-import { Data } from 'client-oauth2';
 import firebase from 'firebase';
 export class NCoordinates {
   latitude: number;

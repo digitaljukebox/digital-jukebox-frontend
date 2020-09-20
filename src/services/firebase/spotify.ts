@@ -31,7 +31,7 @@ export function spotifyCallbackRoute(hash: string) {
     parsedParams[parts[0]] = parts[1];
   });
 
-  const spotifyAuth = {
+  const spotifyAuth: SpotifyAuth = {
     accessToken: parsedParams['access_token'],
     expiresIn: Number(parsedParams['expires_in']),
     state: parsedParams['state'],
