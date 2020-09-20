@@ -9,7 +9,7 @@
           :debounceTime="300"
           @submit="addToQueue"
         >
-          <template #result="{ result, props }">
+          <template #result="{ result }">
             <q-item clickable v-ripple @click="addToQueue(result)">
               <q-item-section avatar>
                 <q-avatar>
@@ -51,11 +51,13 @@
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
 import Error404 from '../Error404.vue';
-import Autocomplete from '@trevoreyre/autocomplete-vue';
-import '@trevoreyre/autocomplete-vue/dist/style.css';
 import axios from 'axios';
 import { Notify } from 'quasar';
 import { mapGetters } from 'vuex';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Autocomplete: any = require('@trevoreyre/autocomplete-vue');
+import '@trevoreyre/autocomplete-vue/dist/style.css';
 
 export default defineComponent({
   name: 'VenueInfo',
@@ -76,7 +78,7 @@ export default defineComponent({
     ...mapGetters('spotify', ['isSpotifyLogin', 'getSpotifyAuth'])
   },
   methods: {
-    searchSong(input) {
+    searchSong(input: string) {
       if (input === '') {
         return [];
       }
@@ -97,7 +99,7 @@ export default defineComponent({
           return data.tracks.items;
         });
     },
-    addToQueue(result) {
+    addToQueue(result: { name: string }) {
       this.$data.songQueue.push(result);
       Notify.create(result.name + ' added to the queue!');
     }
@@ -107,18 +109,17 @@ export default defineComponent({
     const db = this.$fb.getFirestore();
     const docRef = db.collection('venues').doc(venueId);
 
-    let _this = this;
     docRef
       .get()
-      .then(function(doc: firebase.firestore.DocumentSnapshot) {
+      .then((doc: any) => {
         if (doc.exists) {
           console.log('Document data:', doc.data());
-          _this.venue = doc.data();
-          _this.loading = false;
+          this.venue = doc.data();
+          this.loading = false;
         } else {
           // doc.data() will be undefined in this case. this will render a 404 error
           console.log('No such document!');
-          _this.loading = false;
+          this.loading = false;
         }
       })
       .catch(function(error: Error) {

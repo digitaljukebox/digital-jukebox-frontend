@@ -1,6 +1,6 @@
 // import something here
-import * as VueGoogleMaps from 'vue2-google-maps';
-
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const VueGoogleMaps: any = require('vue2-google-maps');
 // "async" is optional;
 // more info on params: https://quasar.dev/quasar-cli/cli-documentation/boot-files#Anatomy-of-a-boot-file
 export default async ({ Vue }: any) => {

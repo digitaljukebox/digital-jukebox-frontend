@@ -14,5 +14,5 @@ export default ({ Vue }: { Vue: Vue }) => {
 
   firebaseService.fBInit(config);
 
-  Vue.prototype.$fb = firebaseService;
+  (Vue as any).prototype.$fb = firebaseService;
 };

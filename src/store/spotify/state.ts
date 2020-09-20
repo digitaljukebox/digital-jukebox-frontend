@@ -2,7 +2,7 @@ export interface SpotifyState {
   loggedIn: boolean;
   accessToken: string;
   tokenType: string;
-  expiresIn: Number;
+  expiresIn: number;
   state: string;
 }
 
