@@ -48,7 +48,8 @@
 }
 </style>
 
-<script lang="ts">
+<script lang="js">
+import Vue from 'vue';
 import { defineComponent, ref } from '@vue/composition-api';
 import Error404 from '../Error404.vue';
 import axios from 'axios';
@@ -56,8 +57,10 @@ import { Notify } from 'quasar';
 import { mapGetters } from 'vuex';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const Autocomplete: any = require('@trevoreyre/autocomplete-vue');
+import Autocomplete from '@trevoreyre/autocomplete-vue';
 import '@trevoreyre/autocomplete-vue/dist/style.css';
+
+Vue.use(Autocomplete);
 
 export default defineComponent({
   name: 'VenueInfo',
@@ -78,7 +81,7 @@ export default defineComponent({
     ...mapGetters('spotify', ['isSpotifyLogin', 'getSpotifyAuth'])
   },
   methods: {
-    searchSong(input: string) {
+    searchSong(input) {
       if (input === '') {
         return [];
       }
@@ -99,7 +102,7 @@ export default defineComponent({
           return data.tracks.items;
         });
     },
-    addToQueue(result: { name: string }) {
+    addToQueue(result) {
       this.$data.songQueue.push(result);
       Notify.create(result.name + ' added to the queue!');
     }
@@ -111,7 +114,7 @@ export default defineComponent({
 
     docRef
       .get()
-      .then((doc: any) => {
+      .then((doc) => {
         if (doc.exists) {
           console.log('Document data:', doc.data());
           this.venue = doc.data();
@@ -122,7 +125,7 @@ export default defineComponent({
           this.loading = false;
         }
       })
-      .catch(function(error: Error) {
+      .catch(function(error) {
         console.log('Error getting document:', error);
       });
   }
