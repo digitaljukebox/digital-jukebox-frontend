@@ -59,32 +59,34 @@ export default {
   methods: {
     updateVenues() {
       // send the users location to the server to get an updated list of venues and distances
-      this.venues = [];
+      (this as any).venues = [];
       db.collection('venues').onSnapshot(querySnapshot => {
-        this.venues = [];
+        (this as any).venues = [];
 
         querySnapshot.forEach(doc =>
-          this.venues.push(venueFromFirestoreDocument(doc))
+          (this as any).venues.push(venueFromFirestoreDocument(doc))
         );
 
-        this.venues.sort((a: Venue, b: Venue) => {
-          let distA: number = this.userLocation.distanceTo(a.location);
-          let distB: number = this.userLocation.distanceTo(b.location);
+        (this as any).venues.sort((a: Venue, b: Venue) => {
+          let distA: number = (this as any).userLocation.distanceTo(a.location);
+          let distB: number = (this as any).userLocation.distanceTo(b.location);
           return distA - distB;
         });
       });
     },
     getUserLocation() {
       navigator.geolocation.getCurrentPosition(position => {
-        this.userLocation = new NCoordinates(
+        (this as any).userLocation = new NCoordinates(
           position.coords.latitude,
           position.coords.longitude
         );
       });
     },
     getVenueDistance: function(venueLocation: NCoordinates): string {
-      if (this.userLocation) {
-        const distance: number = this.userLocation.distanceTo(venueLocation);
+      if ((this as any).userLocation) {
+        const distance: number = (this as any).userLocation.distanceTo(
+          venueLocation
+        );
         let units = 'km';
         if (distance < 1) {
           units = 'm';
@@ -95,15 +97,15 @@ export default {
       }
     },
     navigateToInfoPage(venueId: string) {
-      this.$router.push(`/venue/${venueId}`);
+      (this as any).$router.push(`/venue/${venueId}`);
     }
   },
   mounted() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    this.getUserLocation();
+    (this as any).getUserLocation();
 
-    this.updateVenues();
-    setInterval(this.updateVenues, 30000);
+    (this as any).updateVenues();
+    setInterval((this as any).updateVenues, 30000);
   }
 };
 </script>

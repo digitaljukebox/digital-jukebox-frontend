@@ -53,19 +53,18 @@ export default defineComponent({
     },
     initVenue() {
       const docRef = db.collection('venues').doc(this.venueId);
-      let _this = this;
       docRef
         .get()
-        .then(function(doc: firebase.firestore.DocumentSnapshot) {
+        .then((doc: firebase.firestore.DocumentSnapshot) => {
           if (doc.exists) {
             console.log('Document data:', doc.data());
-            _this.venue = doc.data();
-            _this.loading = false;
-            _this.logProfileView();
+            this.venue = doc.data();
+            this.loading = false;
+            this.logProfileView();
           } else {
             // doc.data() will be undefined in this case. this will render a 404 error
             console.log('No such document!');
-            _this.loading = false;
+            this.loading = false;
           }
         })
         .catch(function(error: Error) {
@@ -73,29 +72,27 @@ export default defineComponent({
         });
     },
     logProfileView() {
-      let _this = this;
-      console.log(_this.venue)
-      firebase.auth().onAuthStateChanged(function(user) {
+      firebase.auth().onAuthStateChanged(user => {
         let view: VenueProfileView;
         if (user) {
           // User is signed in.
           view = {
-            venueId: _this.venueId,
+            venueId: this.venueId,
             userId: user.uid,
-            timestamp: new Date(),
+            timestamp: new Date()
           };
           console.log(view);
         } else {
           // No user is signed in.
           view = {
-            venueId: _this.venueId,
+            venueId: this.venueId,
             userId: '',
-            timestamp: new Date(),
-          }
+            timestamp: new Date()
+          };
         }
         db.collection('venueprofileviews')
           .doc(`${v4()}`)
-          .set(view)
+          .set(view);
       });
     }
   },
@@ -106,6 +103,5 @@ export default defineComponent({
     this.venueId = this.$route.params.id;
     this.initVenue();
   }
-    
 });
 </script>

@@ -213,7 +213,7 @@ export default defineComponent({
       });
   },
   methods: {
-    updatePlace(place) {
+    updatePlace(place: any) {
       console.log(place);
       console.log(place.formatted_address);
       this.venue.address = place.formatted_address;
@@ -235,9 +235,9 @@ export default defineComponent({
     },
     chooseImage() {
       // trigger the file uploader
-      this.$refs.input1.click();
+      (this.$refs.input1 as any).click();
     },
-    previewImage(event) {
+    previewImage(event: any) {
       this.image = null;
       this.imageData = event.target.files[0];
       this.onUpload();

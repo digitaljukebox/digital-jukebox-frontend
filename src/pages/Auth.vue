@@ -20,10 +20,10 @@ export default {
   name: 'Auth',
   data() {
     return {
-      email: null,
+      email: '',
       isPwd: true,
-      password: null,
-      passwordMatch: null
+      password: '',
+      passwordMatch: ''
     };
   },
   mounted() {
@@ -35,7 +35,7 @@ export default {
     const uiConfig: firebaseui.auth.Config = {
       callbacks: {
         signInSuccessWithAuthResult: () => {
-          this.$router.push('/');
+          (this as any).$router.push('/');
           return true;
         }
       },

@@ -72,19 +72,18 @@ export default {
     };
   },
   mounted() {
-    this.venueId = this.$route.params.id;
+    (this as any).venueId = (this as any).$route.params.id;
 
-    this.initProfileViewsChart();
+    (this as any).initProfileViewsChart();
   },
   methods: {
     initProfileViewsChart() {
-      let _this = this;
       db.collection('venueprofileviews').onSnapshot(querySnapshot => {
         const venueProfileViews: VenueProfileView[] = [];
 
         querySnapshot.forEach(doc => {
           let data = doc.data();
-          if (data.venueId == _this.venueId) {
+          if (data.venueId == (this as any).venueId) {
             let profileView: VenueProfileView = {
               venueId: data.venueId,
               userId: data.userId,
@@ -129,7 +128,7 @@ export default {
         }
 
         console.log(chartData);
-        const ctx = document.getElementById('profile-views-chart');
+        const ctx = document.getElementById('profile-views-chart') as any;
         const myChart = new Chart(ctx, {
           type: 'bar',
           data: {
@@ -164,13 +163,13 @@ export default {
             },
             tooltips: {
               callbacks: {
-                label: function(tooltipItem) {
+                label: function(tooltipItem: { yLabel: string }) {
                   return tooltipItem.yLabel;
                 }
               }
             }
           }
-        });
+        }) as any;
       });
     }
   }

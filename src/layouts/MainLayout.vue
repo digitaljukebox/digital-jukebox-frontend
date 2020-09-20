@@ -136,7 +136,7 @@ export default defineComponent({
   computed: {
     ...mapGetters('spotify', ['isSpotifyLogin', 'getSpotifyAuth']),
     loggedInToSpotify() {
-      return this.isSpotifyLogin;
+      return (this as any).isSpotifyLogin;
     }
   },
   mounted() {
@@ -160,7 +160,9 @@ export default defineComponent({
       toSpotifySignIn();
     },
     setSpotifyUser() {
-      const AuthStr = 'Bearer '.concat(this.getSpotifyAuth.accessToken);
+      const AuthStr = 'Bearer '.concat(
+        (this as any).getSpotifyAuth.accessToken
+      );
       axios
         .get('https://api.spotify.com/v1/me', {
           headers: {
