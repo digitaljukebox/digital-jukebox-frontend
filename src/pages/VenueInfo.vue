@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!loading && venue">
+    <div v-if="!loading && venue" class="medium-width">
       <q-img :src="venue.photoURL" spinner-color="white" />
       <h4 class="text">{{ venue.name }}</h4>
       <p class="text">{{ venue.description }}</p>

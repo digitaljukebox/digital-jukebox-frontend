@@ -66,7 +66,7 @@ export default Vue.extend({
   name: 'UserProfile',
   data() {
     return {
-      user: null
+      user: { photoURL: '' }
     };
   },
   async created() {

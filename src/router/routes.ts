@@ -51,7 +51,8 @@ const routes: RouteConfig[] = [
         path: '',
         component: () => import('pages/VenueInfo.vue'),
         meta: {
-          pageName: 'Venue Info'
+          pageName: 'Venue Info',
+          subPage: true
         }
       },
       {
@@ -59,7 +60,8 @@ const routes: RouteConfig[] = [
         component: () => import('pages/queue/VenueQueue.vue'),
         meta: {
           spotifyAuth: true,
-          pageName: 'Venue Queue'
+          pageName: 'Venue Queue',
+          subPage: true
         }
       }
     ]
@@ -82,7 +84,8 @@ const routes: RouteConfig[] = [
         path: 'edit',
         component: () => import('pages/profile/EditProfile.vue'),
         meta: {
-          pageName: 'Edit Profile'
+          pageName: 'Edit Profile',
+          subPage: true
         }
       }
     ]
@@ -98,14 +101,15 @@ const routes: RouteConfig[] = [
         path: '',
         component: () => import('pages/venueManagement/ManageVenues.vue'),
         meta: {
-          pageName: 'Manage Venues'
+          pageName: 'Manage Venues',
         }
       },
       {
         path: 'create',
         component: () => import('pages/venueManagement/CreateEditVenue.vue'),
         meta: {
-          pageName: 'Create Venue'
+          pageName: 'Create Venue',
+          subPage: true
         }
       },
       {
@@ -113,7 +117,8 @@ const routes: RouteConfig[] = [
         component: () => import('pages/venueManagement/VenueDetails.vue'),
         name: 'Venue Details',
         meta: {
-          pageName: 'Venue Details'
+          pageName: 'Venue Details',
+          subPage: true
         }
       },
       {
@@ -121,7 +126,8 @@ const routes: RouteConfig[] = [
         component: () => import('pages/venueManagement/CreateEditVenue.vue'),
         name: 'Edit Venue',
         meta: {
-          pageName: 'Edit Venue'
+          pageName: 'Edit Venue',
+          subPage: true
         }
       },
       {
@@ -129,14 +135,16 @@ const routes: RouteConfig[] = [
         component: () => import('pages/venueManagement/AllowDenyPage.vue'),
         name: 'Allow/Deny List',
         meta: {
-          pageName: 'Allow/Deny List'
+          pageName: 'Allow/Deny List',
+          subPage: true
         }
       },
       {
         path: 'dashboard/:id',
         component: () => import('pages/venueManagement/VenueDashboard.vue'),
         meta: {
-          pageName: 'Venue Dashboard'
+          pageName: 'Venue Dashboard',
+          subPage: true
         }
       }
     ]

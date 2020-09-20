@@ -1,35 +1,37 @@
 <template>
-  <div>
+  <div class="small-width" style="margin: auto;">
     <q-tabs v-model="tab">
       <q-tab name="list" icon="fas fa-list" />
-      <q-tab name="map" icon="fas fa-map" />
+      <q-tab disable name="map" icon="fas fa-map" />
     </q-tabs>
 
-    <div v-if="tab == 'list'">
-      <q-list bordered separator>
-        <q-item
-          clickable
-          @click="navigateToInfoPage(venue.id)"
-          v-ripple
-          v-for="venue in venues"
-          :key="venue.id"
-        >
-          <q-item-section>
-            <q-item-label>{{ venue.name }}</q-item-label>
-            <q-item-label caption>{{
-              getVenueDistance(venue.location)
-            }}</q-item-label>
-          </q-item-section>
-          <q-item-section avatar>
-            <q-icon name="fas fa-chevron-right" />
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </div>
+    <q-tab-panels v-model="tab" animated>
+      <q-tab-panel name="list">
+        <q-list bordered separator>
+          <q-item
+            clickable
+            @click="navigateToInfoPage(venue.id)"
+            v-ripple
+            v-for="venue in venues"
+            :key="venue.id"
+          >
+            <q-item-section>
+              <q-item-label>{{ venue.name }}</q-item-label>
+              <q-item-label caption>{{
+                  getVenueDistance(venue.location)
+                }}</q-item-label>
+            </q-item-section>
+            <q-item-section avatar>
+              <q-icon name="fas fa-chevron-right" />
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-tab-panel>
 
-    <div v-if="tab == 'map'">
-      Map
-    </div>
+      <q-tab-panel name="map">
+        MAP
+      </q-tab-panel>
+    </q-tab-panels>
   </div>
 </template>
 
@@ -68,8 +70,8 @@ export default {
         );
 
         (this as any).venues.sort((a: Venue, b: Venue) => {
-          let distA: number = (this as any).userLocation.distanceTo(a.location);
-          let distB: number = (this as any).userLocation.distanceTo(b.location);
+          let distA: number = (this as any).userLocation?.distanceTo(a.location);
+          let distB: number = (this as any).userLocation?.distanceTo(b.location);
           return distA - distB;
         });
       });

@@ -2,7 +2,21 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
+        <template v-if="subPage">
+          <q-btn
+            flat
+            :ripple="false"
+            icon="fas fa-chevron-left"
+            @click="$router.back()"
+          />
+          <q-toolbar-title>
+            {{title}}
+          </q-toolbar-title>
+        </template>
+
+        <template v-else>
         <q-btn
+          v-if="$q.screen.lt.md"
           flat
           dense
           round
@@ -10,9 +24,10 @@
           aria-label="Menu"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
-        <q-toolbar-title>
-          Digital Jukebox
+        <q-toolbar-title class="q-ml-sm">
+          {{title}}
         </q-toolbar-title>
+        </template>
       </q-toolbar>
     </q-header>
 
@@ -74,7 +89,13 @@
     </q-drawer>
 
     <q-page-container>
+      <transition
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
+        :duration="300"
+      >
       <router-view />
+      </transition>
     </q-page-container>
   </q-layout>
 </template>
@@ -124,6 +145,7 @@ export default defineComponent({
   },
   data() {
     return {
+      title: document.title.substring(0, document.title.indexOf(" |")) || 'Digital Jukebox',
       user: null,
       spotifyUser: null as SpotifyUser
     };
@@ -133,10 +155,21 @@ export default defineComponent({
       this.user = user;
     });
   },
+  beforeRouteLeave (to, from, next) {
+    this.title = to.meta.pageName || 'Digital Jukebox';
+    next();
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.title = to.meta.pageName || 'Digital Jukebox';
+    next();
+  },
   computed: {
     ...mapGetters('spotify', ['isSpotifyLogin', 'getSpotifyAuth']),
     loggedInToSpotify() {
       return (this as any).isSpotifyLogin;
+    },
+    subPage() {
+      return this.$route.meta.subPage;
     }
   },
   mounted() {
