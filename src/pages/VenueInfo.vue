@@ -8,9 +8,9 @@
       <p class="text" style="padding-top:15px" v-if="isSpotifyLogin">
         <q-btn
           @click="navigateToQueuePage()"
-          color="white"
-          text-color="black"
-          label="View Queue"
+          color="green"
+          text-color="white"
+          label="Check In"
         />
       </p>
     </div>
