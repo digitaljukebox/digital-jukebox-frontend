@@ -13,13 +13,12 @@
 import firebase from 'firebase';
 import 'firebase/firestore';
 const db = firebase.firestore();
-import draggable from 'vuedraggable';
 import AllowDenyList from '../../components/AllowDenyList';
 
 export default {
   name: 'VenueDetails',
   components: {
-    draggable, AllowDenyList
+    AllowDenyList
   },
   data() {
     return {
