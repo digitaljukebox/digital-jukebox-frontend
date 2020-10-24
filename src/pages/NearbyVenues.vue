@@ -153,7 +153,7 @@ export default {
         }
         return `${distance.toFixed(2)}${units}`;
       } else {
-        return '????';
+        return '? km';
       }
     },
     navigateToInfoPage(venueId: string) {

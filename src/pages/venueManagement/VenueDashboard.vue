@@ -145,7 +145,13 @@ export default {
             datasets: [
               {
                 label: 'Daily Venue Views',
-                data: chartData
+                data: chartData,
+                backgroundColor: [
+                  'rgba(0, 0, 200, 0.5)',
+                ],
+                borderColor: [
+                  'rgba(0, 0, 200, 0.5)',
+                ],
               }
             ]
           },
@@ -241,7 +247,13 @@ export default {
             datasets: [
               {
                 label: "'Daily Venue Check In's",
-                data: chartData
+                data: chartData,
+                backgroundColor: [
+                  'rgba(0, 0, 200, 0.5)',
+                ],
+                borderColor: [
+                  'rgba(0, 0, 200, 0.5)',
+                ],
               }
             ]
           },
