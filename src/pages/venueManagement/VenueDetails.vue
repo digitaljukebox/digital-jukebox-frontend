@@ -4,7 +4,7 @@
       {{ venue.name }}
     </div>
 
-    <div class="text-h6">Daily Metrics</div>
+    <div class="text-h5 q-py-sm">Daily Metrics</div>
     <div class="row q-mb-lg">
       <q-chip square>
         <q-avatar color="secondary" text-color="white">50</q-avatar>
@@ -20,6 +20,7 @@
       </q-chip>
     </div>
 
+    <div class="text-h5 q-py-sm">Playback Controls</div>
     <q-card style="max-width: 500px;">
       <q-card-section horizontal>
         <q-img
@@ -86,6 +87,7 @@
       </q-list>
     </div>
 
+    <div class="text-h5 q-py-sm">Manage Venue</div>
     <div class="row q-gutter-sm">
       <q-btn
         color="primary"
@@ -119,6 +121,7 @@ export default {
   },
   data() {
     return {
+      user: {},
       venueId: null,
       venue: {
         name: null
@@ -136,7 +139,6 @@ export default {
       .get()
       .then(doc => {
         let data = doc.data();
-        console.log(data);
         this.venue = { ...data, location: { ...data.location } };
 
         this.center = {
@@ -152,6 +154,6 @@ export default {
     navigateToDashboardPage() {
       this.$router.push(`/manage-venues/dashboard/${this.venueId}`);
     }
-  }
+  },
 };
 </script>
