@@ -252,7 +252,7 @@ export default defineComponent({
         .put(this.imageData);
 
       storageRef.on(
-        `state_changed`,
+        'state_changed',
         snapshot => {
           this.uploadValue =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;

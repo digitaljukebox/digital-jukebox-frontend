@@ -3,5 +3,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "strictNullChecks": false
-  }
+  },
+  "types": [
+    "leaflet",
+    "spotify-web-api-node"
+  ],
+  "noImplicitAny": false
 }

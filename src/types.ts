@@ -56,11 +56,6 @@ export interface SpotifyAuth {
   state: string;
 }
 
-export interface SpotifyUser {
-  displayName: string | null;
-  image: string | null;
-}
-
 export type VenueProfileView = {
   venueId: string;
   userId: string; // will be an empty string if user wasn't logged in when viewing the venue.
@@ -91,3 +86,7 @@ export function venueFromFirestoreDocument(
 
   return venue;
 }
+
+export type UserProfile = {
+  spotifyCode: string;
+};

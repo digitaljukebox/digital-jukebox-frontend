@@ -52,9 +52,9 @@ export default route(function({ Vue }) {
 
   // Spotify auth callback guard
   Router.beforeEach((to, from, next) => {
-    if (to.path === '/spotify-callback') {
-      spotifyCallbackRoute(to.hash);
-      next('/');
+    if (to.path === '/spotifycallback') {
+      spotifyCallbackRoute(to.query.code as string);
+      next('/profile');
     } else {
       next();
     }

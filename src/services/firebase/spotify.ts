@@ -1,43 +1,42 @@
-import store from '../../store';
-import { route } from 'quasar/wrappers';
-import { RouteParams } from '@quasar/app';
-import { Dictionary, SpotifyAuth } from '../../types';
-import ClientOAuth2 from 'client-oauth2';
+import firebase from 'firebase';
+import 'firebase/firestore';
 
-const redirectUri = `http://localhost:8080/spotify-callback`;
+// this is a little gross but is needed to "monkey patch" the package to support the browser
+import SpotifyWebApi from 'spotify-web-api-node';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import serverMethods from 'spotify-web-api-node/src/server-methods';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+SpotifyWebApi._addMethods(serverMethods);
 
-export function toSpotifySignIn() {
-  window.location.replace(getSpotifyOAuthAuthURI());
-}
+const scopes = ['streaming', 'user-read-private', 'user-read-email']
+const redirectUri = `${window.location.protocol}//${window.location.host}/spotifycallback`;
+const clientId = '18aac906abf4434197d6280aca076f45';
 
-const spotifyOAuth = new ClientOAuth2({
-  clientId: 'bcc1ec28d893433682d09c6f04cdc6c8',
-  authorizationUri: 'https://accounts.spotify.com/authorize',
-  redirectUri,
-  scopes: []
-});
-
-export function getSpotifyOAuthAuthURI(): string {
-  return spotifyOAuth.token.getUri();
-}
-
-export function spotifyCallbackRoute(hash: string) {
-  const params = hash.split('&').map(part => part.replace(/#/, ''));
-
-  const parsedParams: Dictionary<string | string> = {};
-
-  params.forEach(param => {
-    const parts = param.split('=');
-    parsedParams[parts[0]] = parts[1];
+export function authenticateSpotify() {
+  const spotifyApi = new SpotifyWebApi({
+    redirectUri: redirectUri,
+    clientId: clientId
   });
 
-  const spotifyAuth: SpotifyAuth = {
-    accessToken: parsedParams['access_token'],
-    expiresIn: Number(parsedParams['expires_in']),
-    state: parsedParams['state'],
-    tokenType: parsedParams['token_type']
-  };
+  window.location.href = spotifyApi.createAuthorizeURL(scopes, '');
+}
 
-  store.commit('spotify/updateAuthDetails', spotifyAuth);
-  store.commit('spotify/setUserLoggedIn', true);
+export function spotifyCallbackRoute(code: string) {
+  const db = firebase.firestore();
+
+  firebase.auth().onAuthStateChanged(async user => {
+    let firebaseUser: firebase.User;
+
+    if (user) {
+      firebaseUser = { ...user };
+    }
+
+    if (firebaseUser) {
+      await db.collection('users')
+        .doc(firebaseUser.uid)
+        .set({ spotifyCode: code })
+    }
+  });
 }
