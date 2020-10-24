@@ -1,10 +1,15 @@
 <template>
   <div>
-    <div v-if="!loading && venue">
+    <div v-if="!loading && venue" class="q-pa-md">
       <h4 class="text">{{ venue.name }}</h4>
+
+      <q-banner v-if="!spotifyLoggedIn" rounded class="bg-warning q-my-md">
+        Sorry, but you need to link your Spotify account before you can use this page. <router-link :to="{name: 'profile'}">Click here</router-link> to link your Spotify account.
+      </q-banner>
 
       <p>
         <autocomplete
+          :disabled="!spotifyLoggedIn"
           :search="searchSong"
           :debounceTime="300"
           @submit="addToQueue"
@@ -17,7 +22,8 @@
                 </q-avatar>
               </q-item-section>
               <q-item-section
-                >{{ result.name }} {{ result.artists[0].name }}</q-item-section
+              >{{ result.name }} {{ result.artists[0].name }}
+              </q-item-section
               >
             </q-item>
           </template>
@@ -31,7 +37,8 @@
             </q-avatar>
           </q-item-section>
           <q-item-section
-            >{{ song.name }} {{ song.artists[0].name }}</q-item-section
+          >{{ song.name }} {{ song.artists[0].name }}
+          </q-item-section
           >
         </q-item>
       </q-list>
@@ -50,15 +57,15 @@
 
 <script lang="js">
 import Vue from 'vue';
-import { defineComponent, ref } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import Error404 from '../Error404.vue';
 import axios from 'axios';
 import { v4 } from 'uuid';
 import { Notify } from 'quasar';
-import { mapGetters } from 'vuex';
+import {spotifyApi} from '@services/firebase/spotify';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-import firebase from 'firebase';
+import firebase, { UserInfo } from 'firebase';
 import Autocomplete from '@trevoreyre/autocomplete-vue';
 import '@trevoreyre/autocomplete-vue/dist/style.css';
 
@@ -72,6 +79,9 @@ export default defineComponent({
   },
   data() {
     return {
+      user: {},
+      userProfile: {},
+      userProfileRef: {},
       loading: true,
       venue: null,
       songQueue: [],
@@ -80,7 +90,9 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapGetters('spotify', ['isSpotifyLogin', 'getSpotifyAuth'])
+    spotifyLoggedIn() {
+      return !!this.userProfile.spotifyCode;
+    }
   },
   methods: {
     searchSong(input) {
@@ -92,7 +104,8 @@ export default defineComponent({
       url.searchParams.append('q', input);
       url.searchParams.append('type', 'track');
 
-      const AuthStr = 'Bearer '.concat(this.getSpotifyAuth.accessToken);
+      console.log(this.userProfile.spotifyCode);
+      const AuthStr = 'Bearer '.concat(this.userProfile.spotifyCode);
       return axios
         .get(url.toString(), {
           headers: {
@@ -137,11 +150,25 @@ export default defineComponent({
           venueId,
           userId: user.uid,
           timeStamp: new Date()
-        }
+        };
         db.collection('venuecheckins').doc(`${v4()}`).set(checkIn);
       }
     });
+  },
+  async created() {
+    const db = this.$fb.getFirestore();
 
+    firebase.auth().onAuthStateChanged(async user => {
+      if (user) {
+        this.user = user;
+        this.userProfileRef = db.collection('users').doc(user.uid);
+
+        this.userProfileRef
+          .onSnapshot(doc => {
+            this.userProfile = doc.data();
+          });
+      }
+    });
   }
 });
 </script>

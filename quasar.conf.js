@@ -8,6 +8,7 @@
 /* eslint-env node */
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { configure } = require('quasar/wrappers');
+const path = require('path');
 
 module.exports = configure(function(ctx) {
   return {
@@ -17,9 +18,6 @@ module.exports = configure(function(ctx) {
         eslint: true
       }
     },
-
-    // https://quasar.dev/quasar-cli/prefetch-feature
-    // preFetch: true,
 
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
@@ -31,37 +29,18 @@ module.exports = configure(function(ctx) {
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
-      // 'ionicons-v4',
-      // 'mdi-v5',
       'fontawesome-v5',
-      // 'eva-icons',
-      // 'themify',
-      // 'line-awesome',
-      // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
-      'roboto-font' // optional, you are not bound to it
-      // 'material-icons', // optional, you are not bound to it
+      'roboto-font'
     ],
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
 
-      // transpile: false,
-
-      // Add dependencies for transpiling with Babel (Array of string/regex)
-      // (from node_modules, which are by default not transpiled).
-      // Applies only if "transpile" is set to true.
-      // transpileDependencies: [],
-
-      // rtl: false, // https://quasar.dev/options/rtl-support
-      // preloadChunks: true,
-      // showProgress: false,
-      // gzip: true,
-      // analyze: true,
-
-      // Options below are automatically set depending on the env, set them if you want to override
-      // extractCSS: false,
+      env: {
+        REMOTE_DEV_TOOLS: process.env.REMOTE_DEV_TOOLS
+      },
 
       // https://quasar.dev/quasar-cli/handling-webpack
       extendWebpack(cfg) {
@@ -74,6 +53,14 @@ module.exports = configure(function(ctx) {
             exclude: /node_modules/
           });
         }
+
+        // add some custom aliases
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias,
+          '@components': path.resolve(__dirname, './src/components'),
+          '@assets': path.resolve(__dirname, './src/assets'),
+          '@services': path.resolve(__dirname, './src/services'),
+        };
       }
     },
 

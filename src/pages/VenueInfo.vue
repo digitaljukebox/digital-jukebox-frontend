@@ -5,7 +5,7 @@
       <h4 class="text">{{ venue.name }}</h4>
       <p class="text">{{ venue.description }}</p>
       <p class="text">Address: {{ venue.address }}</p>
-      <p class="text" style="padding-top:15px" v-if="isSpotifyLogin">
+      <p class="text" style="padding-top:15px">
         <q-btn
           @click="navigateToQueuePage()"
           color="green"
@@ -31,7 +31,6 @@ import { VenueProfileView } from 'src/types.ts';
 import { defineComponent, ref } from '@vue/composition-api';
 import firebase from 'firebase';
 import Error404 from './Error404.vue';
-import { mapGetters } from 'vuex';
 import { v4 } from 'uuid';
 const db = firebase.firestore();
 
@@ -95,9 +94,6 @@ export default defineComponent({
           .set(view);
       });
     }
-  },
-  computed: {
-    ...mapGetters('spotify', ['isSpotifyLogin'])
   },
   mounted() {
     this.venueId = this.$route.params.id;

@@ -88,12 +88,12 @@ export default Vue.extend({
   methods: {
     authenticateSpotify,
     removeSpotify() {
-      this.userProfileRef.update({spotifyCode: ''});
+      this.userProfileRef.update({spotify: null});
     }
   },
   computed: {
     spotifyLoggedIn(): boolean {
-      return !!this.userProfile.spotifyCode;
+      return !!this.userProfile?.spotify?.accessToken;
     }
   },
   async created() {

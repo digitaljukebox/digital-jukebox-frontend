@@ -67,6 +67,7 @@ const routes: RouteConfig[] = [
     ]
   },
   {
+    name: 'profile',
     path: '/profile',
     meta: {
       auth: true

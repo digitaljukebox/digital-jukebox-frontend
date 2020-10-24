@@ -88,5 +88,9 @@ export function venueFromFirestoreDocument(
 }
 
 export type UserProfile = {
-  spotifyCode: string;
+  spotify: {
+    accessToken: string,
+    expiresAt: number,
+    refreshToken: string,
+  };
 };
