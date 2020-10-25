@@ -4,7 +4,7 @@
       {{ venue.name }}
     </div>
 
-    <div class="text-h5 q-py-sm">Daily Metrics</div>
+    <div class="text-h5 q-py-sm">Metrics From Today</div>
     <div class="row q-mb-lg">
       <q-chip square>
         <q-avatar color="secondary" text-color="white">{{metrics.checkins}}</q-avatar>
@@ -25,7 +25,7 @@
       <q-card-section horizontal>
         <q-img
           class="col-5"
-          src="https://cdn.quasar.dev/img/parallax1.jpg"
+          src="https://i.scdn.co/image/ab67616d0000b273f619042d5f6b2149a4f5e0ca"
           :ratio="1"
         />
 
@@ -33,21 +33,21 @@
           style="justify-content: space-between;display: flex;flex-direction: column;"
         >
           <div>
-            <div class="text-h4">Song Name</div>
-            <div class="text-h5">Artist Name</div>
-            <div class="text-subtitle1">Requested By: Aidan K.</div>
+            <div class="text-h4">Firework</div>
+            <div class="text-h5">Katy Perry</div>
+            <div class="text-subtitle1">Requested By: Jaimyn M.</div>
           </div>
 
           <q-card-actions>
-            <q-btn flat round color="primary" icon="fas fa-pause" />
+            <q-btn @click="track.playing = ! track.playing" flat round color="primary" :icon="track.playing ? 'fas fa-pause' : 'fas fa-play'" />
             <q-btn flat round color="negative" icon="fas fa-forward" />
           </q-card-actions>
         </q-card-section>
       </q-card-section>
       <q-card-section style="padding: 0">
-        <q-linear-progress size="25px" :value="0.15" color="primary">
+        <q-linear-progress size="25px" :value="track.played/track.length" color="primary">
           <div class="absolute-full flex flex-center">
-            <q-badge color="white" text-color="primary" label="2:01 mins" />
+            <q-badge color="white" text-color="primary" :label="trackLength" />
           </div>
         </q-linear-progress>
       </q-card-section>
@@ -59,17 +59,17 @@
         <q-btn flat round><q-icon name="fas fa-plus"/></q-btn>
       </q-toolbar>
       <q-list bordered>
-        <draggable v-model="myArray" @start="drag = true" @end="drag = false">
-          <q-item v-for="element in myArray" :key="element.id">
+        <draggable v-model="upcoming" @start="drag = true" @end="drag = false">
+          <q-item v-for="track in upcoming" :key="track.name">
             <q-item-section avatar>
               <q-avatar>
-                <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+                <img src="https://i.scdn.co/image/ab67616d0000b273f619042d5f6b2149a4f5e0ca" />
               </q-avatar>
             </q-item-section>
             <q-item-section>
-              <q-item-label>{{ element.name }}</q-item-label>
-              <q-item-label caption lines="1">Artist Name</q-item-label>
-              <q-item-label caption lines="1">2:56 mins</q-item-label>
+              <q-item-label>{{ track.name }}</q-item-label>
+              <q-item-label caption lines="1">Katy Perry</q-item-label>
+              <q-item-label caption lines="1">{{trackLengthFormat(track.length)}}</q-item-label>
             </q-item-section>
 
             <q-item-section>
@@ -91,12 +91,12 @@
     <div class="row q-gutter-sm">
       <q-btn
         color="primary"
-        label="Edit Venue Details"
+        label="Edit Venue"
         @click="navigateToEditPage"
       />
       <q-btn
         color="primary"
-        label="Venue Metrics"
+        label="Metrics"
         @click="navigateToDashboardPage"
       />
       <q-btn
@@ -113,6 +113,7 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 const db = firebase.firestore();
 import draggable from 'vuedraggable';
+import {trackLengthFormat} from '../../services/filters';
 
 export default {
   name: 'VenueDetails',
@@ -126,17 +127,26 @@ export default {
       venue: {
         name: null
       },
+      track: {
+        length: 228,
+        played: 12,
+        playing: true,
+      },
       metrics: {
         views: 0,
         checkins: 0,
       },
-      myArray: [
-        { id: 1, name: 'hi' },
-        { id: 2, name: 'hello' }
+      upcoming: [
+        { name: 'Teenage Dream', length: 205 },
+        { name: 'California Gurls', length: 212 },
       ]
     };
   },
   mounted() {
+    setInterval(() => {
+      if (this.track.playing) this.track.played++;
+      if (this.track.played >= this.track.length) this.track.played = 0;
+    }, 1000);
     this.venueId = this.$route.params.id;
     db.collection('venues')
       .doc(this.venueId)
@@ -161,7 +171,15 @@ export default {
         this.metrics.checkins = checkins.size;
       });
   },
+  computed: {
+    trackLength() {
+      return trackLengthFormat(this.track.played * 1000) + ' / ' + trackLengthFormat(this.track.length * 1000);
+    },
+  },
   methods: {
+    trackLengthFormat(value) {
+      return trackLengthFormat(value*1000);
+    },
     navigateToEditPage() {
       this.$router.push(`/manage-venues/${this.venueId}/edit`);
     },

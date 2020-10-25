@@ -12,7 +12,7 @@
         <q-item>
           <q-item-section>
             <span>Tracks in this list will <strong>not</strong> be allowed to play.</span>
-            <div class="q-pt-md"v-if="!!allowList.length">Please remove all songs from the Allow List to use the Deny List.</div>
+            <div class="q-pt-md" v-if="!!allowList.length">Please remove all songs from the Allow List to use the Deny List.</div>
           </q-item-section>
         </q-item>
 
@@ -151,9 +151,11 @@
 import { defineComponent } from '@vue/composition-api';
 import firebase, { UserInfo } from 'firebase';
 import 'firebase/firestore';
-import { UserProfile, Track } from '../types';
+import { Track, UserProfile } from '../types';
+import { trackLengthFormat } from 'src/services/filters';
 import SearchResponse = SpotifyApi.SearchResponse;
 import TrackObjectFull = SpotifyApi.TrackObjectFull;
+
 const db = firebase.firestore();
 
 export default defineComponent({
@@ -196,7 +198,7 @@ export default defineComponent({
   computed: {
     allowListSearchResultsFormatted(): Array<Track> {
       if (!this.allowListSearchResults?.tracks) return [];
-      let tracks = (this.allowListSearchResults as any)?.tracks.map((track: TrackObjectFull) => {
+      return (this.allowListSearchResults as any)?.tracks.map((track: TrackObjectFull) => {
         return {
           id: track.id,
           album: {
@@ -214,12 +216,10 @@ export default defineComponent({
           length: track.duration_ms
         };
       });
-
-      return tracks;
     },
     denyListSearchResultsFormatted(): Array<Track> {
       if (!this.denyListSearchResults?.tracks) return [];
-      let tracks = (this.denyListSearchResults as any)?.tracks.map((track: TrackObjectFull) => {
+      return (this.denyListSearchResults as any)?.tracks.map((track: TrackObjectFull) => {
         return {
           id: track.id,
           album: {
@@ -237,21 +237,11 @@ export default defineComponent({
           length: track.duration_ms
         };
       });
-
-      return tracks;
     }
   },
   filters: {
-    trackLengthFormat(length: number): string {
-      length = length / 1000;
-      let totalHours = Math.floor(length / (60 * 60));
-      let isHours = Math.floor(length / (60 * 60));
-      let seconds = length - (totalHours * 60 * 60);
-      let totalMinutes = Math.floor(length / 60);
-      let totalSeconds = Math.floor(seconds - (totalMinutes * 60));
-      return isHours ? `${totalHours.toString().padStart(2, '0')}:${totalMinutes.toString().padStart(2, '0')}:
-      ${totalSeconds.toString().padStart(2, '0')} hours` : `${totalMinutes.toString().padStart(2, '0')}:
-      ${totalSeconds.toString().padStart(2, '0')} mins`;
+    trackLengthFormat(value) {
+      return trackLengthFormat(value);
     }
   },
   methods: {
