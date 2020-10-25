@@ -240,7 +240,7 @@ export default defineComponent({
     }
   },
   filters: {
-    trackLengthFormat(value) {
+    trackLengthFormat(value: number) {
       return trackLengthFormat(value);
     }
   },
