@@ -8,7 +8,7 @@
       <p class="text" style="padding-top:15px">
         <q-btn
           @click="navigateToQueuePage()"
-          color="green"
+          color="secondary"
           text-color="white"
           label="Check In"
         />

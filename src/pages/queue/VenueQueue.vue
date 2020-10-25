@@ -63,6 +63,7 @@ import axios from 'axios';
 import { v4 } from 'uuid';
 import { Notify } from 'quasar';
 import {spotifyApi} from '@services/firebase/spotify';
+const db = firebase.firestore();
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import firebase, { UserInfo } from 'firebase';
@@ -91,7 +92,7 @@ export default defineComponent({
   },
   computed: {
     spotifyLoggedIn() {
-      return !!this.userProfile.spotifyCode;
+      return !!this.userProfile.spotify.accessToken;
     }
   },
   methods: {
@@ -104,8 +105,7 @@ export default defineComponent({
       url.searchParams.append('q', input);
       url.searchParams.append('type', 'track');
 
-      console.log(this.userProfile.spotifyCode);
-      const AuthStr = 'Bearer '.concat(this.userProfile.spotifyCode);
+      const AuthStr = 'Bearer '.concat(this.userProfile.spotify.accessToken);
       return axios
         .get(url.toString(), {
           headers: {
@@ -118,8 +118,22 @@ export default defineComponent({
         });
     },
     addToQueue(result) {
-      this.$data.songQueue.push(result);
-      Notify.create(result.name + ' added to the queue!');
+      firebase.auth().onAuthStateChanged(async user => {
+        let firebaseUser;
+        if (user) {
+          firebaseUser = { ...user };
+        }
+
+        if (firebaseUser) {
+          console.log(this.venue);
+          await db.collection('venues')
+            .doc(this.$route.params.id)
+            .update({queuedTracks: firebase.firestore.FieldValue.arrayUnion(result)});
+            Notify.create(result.name + ' added to the queue!');
+        } else {
+          Notify.create(result.name + ' could not be added to the queue due to an error.');
+        }
+      });
     }
   },
   mounted() {

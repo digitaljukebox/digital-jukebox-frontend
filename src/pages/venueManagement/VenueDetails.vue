@@ -40,7 +40,7 @@
 
           <q-card-actions>
             <q-btn @click="track.playing = ! track.playing" flat round color="primary" :icon="track.playing ? 'fas fa-pause' : 'fas fa-play'" />
-            <q-btn flat round color="negative" icon="fas fa-forward" />
+            <q-btn @click="track.played = 0" flat round color="primary" icon="fas fa-forward" />
           </q-card-actions>
         </q-card-section>
       </q-card-section>
@@ -59,26 +59,22 @@
         <q-btn flat round><q-icon name="fas fa-plus"/></q-btn>
       </q-toolbar>
       <q-list bordered>
-        <draggable v-model="upcoming" @start="drag = true" @end="drag = false">
-          <q-item v-for="track in upcoming" :key="track.name">
+        <draggable v-model="queuedTracks" @start="drag = true" @end="drag = false">
+          <q-item v-for="track in queuedTracks" :key="track.name">
             <q-item-section avatar>
               <q-avatar>
-                <img src="https://i.scdn.co/image/ab67616d0000b273f619042d5f6b2149a4f5e0ca" />
+                <img :src="track.album.images[0].url" />
               </q-avatar>
             </q-item-section>
             <q-item-section>
               <q-item-label>{{ track.name }}</q-item-label>
-              <q-item-label caption lines="1">Katy Perry</q-item-label>
-              <q-item-label caption lines="1">{{trackLengthFormat(track.length)}}</q-item-label>
-            </q-item-section>
-
-            <q-item-section>
-              <q-item-label caption>Requested By: Aidan K.</q-item-label>
+              <q-item-label caption lines="1">{{ track.artists[0].name }}</q-item-label>
+              <q-item-label caption lines="1">{{trackLengthFormat(track.duration_ms / 1000)}}</q-item-label>
             </q-item-section>
 
             <q-item-section side>
               <div class="row items-center q-gutter-sm">
-                <q-btn flat round color="negative" icon="fas fa-minus-circle" />
+                <q-btn @click="removeTrack(track)" flat round color="negative" icon="fas fa-minus-circle" />
                 <q-icon name="fas fa-grip-lines" size="sm" color="grey-5" />
               </div>
             </q-item-section>
@@ -136,10 +132,6 @@ export default {
         views: 0,
         checkins: 0,
       },
-      upcoming: [
-        { name: 'Teenage Dream', length: 205 },
-        { name: 'California Gurls', length: 212 },
-      ]
     };
   },
   mounted() {
@@ -150,8 +142,7 @@ export default {
     this.venueId = this.$route.params.id;
     db.collection('venues')
       .doc(this.venueId)
-      .get()
-      .then(doc => {
+      .onSnapshot(doc => {
         let data = doc.data();
         this.venue = { ...data, location: { ...data.location } };
 
@@ -172,11 +163,28 @@ export default {
       });
   },
   computed: {
+    queuedTracks() {
+      console.log(this.venue.queuedTracks);
+      return this.venue.queuedTracks || [];
+    },
     trackLength() {
       return trackLengthFormat(this.track.played * 1000) + ' / ' + trackLengthFormat(this.track.length * 1000);
     },
   },
   methods: {
+    removeTrack(track) {
+      firebase.auth().onAuthStateChanged(async user => {
+        if (user) {
+          let firebaseUser = { ...user };
+
+          if (firebaseUser) {
+            await db.collection('venues')
+              .doc(this.venueId)
+              .update({ queuedTracks: firebase.firestore.FieldValue.arrayRemove(track) });
+          }
+        }
+      });
+    },
     trackLengthFormat(value) {
       return trackLengthFormat(value*1000);
     },

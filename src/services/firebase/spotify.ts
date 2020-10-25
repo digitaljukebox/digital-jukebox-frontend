@@ -41,7 +41,7 @@ export async function refreshSpotifyToken() {
             refreshToken: userProfile.spotify.refreshToken,
           });
 
-          console.log(userProfile.spotify.refreshToken);
+          if (!userProfile.spotify.refreshToken) resolve();
 
           spotifyApi.refreshAccessToken().then((data) => {
               console.log(data);
