@@ -7,17 +7,17 @@
     <div class="text-h5 q-py-sm">Daily Metrics</div>
     <div class="row q-mb-lg">
       <q-chip square>
-        <q-avatar color="secondary" text-color="white">50</q-avatar>
+        <q-avatar color="secondary" text-color="white">{{metrics.checkins}}</q-avatar>
         User Check-Ins
       </q-chip>
       <q-chip square>
-        <q-avatar color="secondary" text-color="white">50</q-avatar>
+        <q-avatar color="secondary" text-color="white">{{metrics.views}}</q-avatar>
         Venue Views
       </q-chip>
-      <q-chip square>
-        <q-avatar color="secondary" text-color="white">50</q-avatar>
-        Song Requests
-      </q-chip>
+<!--      <q-chip square>-->
+<!--        <q-avatar color="secondary" text-color="white">50</q-avatar>-->
+<!--        Song Requests-->
+<!--      </q-chip>-->
     </div>
 
     <div class="text-h5 q-py-sm">Playback Controls</div>
@@ -126,6 +126,10 @@ export default {
       venue: {
         name: null
       },
+      metrics: {
+        views: 0,
+        checkins: 0,
+      },
       myArray: [
         { id: 1, name: 'hi' },
         { id: 2, name: 'hello' }
@@ -145,6 +149,16 @@ export default {
           lat: data.location.latitude,
           lng: data.location.longitude
         };
+      });
+
+    let date = new Date(firebase.firestore.Timestamp.now().toMillis() - (24*60*60*1000))
+    db.collection('venueprofileviews').where('venueId', '==', this.venueId).where('timestamp', '>', date)
+      .onSnapshot((views) => {
+        this.metrics.views = views.size;
+      });
+    db.collection('venuecheckins').where('venueId', '==', this.venueId).where('timestamp', '>', date)
+      .onSnapshot((checkins) => {
+        this.metrics.checkins = checkins.size;
       });
   },
   methods: {

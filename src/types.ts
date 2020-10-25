@@ -1,4 +1,7 @@
 import firebase from 'firebase';
+import ImageObject = SpotifyApi.ImageObject;
+import TrackObjectFull = SpotifyApi.TrackObjectFull;
+
 export class NCoordinates {
   latitude: number;
   longitude: number;
@@ -94,3 +97,31 @@ export type UserProfile = {
     refreshToken: string,
   };
 };
+
+export type artist = {
+  id: string,
+  url: string,
+  followers: number,
+  name: string,
+  image: string,
+};
+
+export type album = {
+  id: string,
+  url: string,
+  name: string,
+  image: string,
+  release: string,
+};
+
+export type Track = {
+  id: string,
+  album: album | null,
+  url: string,
+  name: string,
+  image: string,
+  artists: Array<artist>,
+  explicit: boolean,
+  length: number,
+};
+

@@ -2,11 +2,13 @@
   "extends": "@quasar/app/tsconfig-preset",
   "compilerOptions": {
     "baseUrl": ".",
-    "strictNullChecks": false
+    "strictNullChecks": false,
   },
   "types": [
     "leaflet",
-    "spotify-web-api-node"
+    "spotify-web-api-node",
+    "spotify-api",
+    "types"
   ],
   "noImplicitAny": false
 }
