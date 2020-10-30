@@ -234,6 +234,12 @@ export default defineComponent({
     },
   },
   mounted() {
+
+    setInterval(() => {
+      if (this.track.playing) this.track.played++;
+      if (this.track.played >= this.track.length) this.track.played = 0;
+    }, 1000);
+
     const venueId = this.$route.params.id;
     const db = this.$fb.getFirestore();
 
