@@ -4,7 +4,7 @@
       <h4 class="text">{{ venue.name }}</h4>
 
       <q-banner v-if="!spotifyLoggedIn" rounded class="bg-warning q-my-md">
-        Sorry, but you need to link your Spotify account before you can use this page. <router-link :to="{name: 'profile'}">Click here</router-link> to link your Spotify account.
+        Sorry, but you need to link your Spotify account before you can use this page. <router-link to="/profile">Click here</router-link> to link your Spotify account.
       </q-banner>
 
       <p>
@@ -92,6 +92,9 @@ export default defineComponent({
   },
   computed: {
     spotifyLoggedIn() {
+      if (!this.userProfile.spotify) {
+        return false;
+      }
       return !!this.userProfile.spotify.accessToken;
     }
   },
