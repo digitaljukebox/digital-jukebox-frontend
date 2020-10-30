@@ -7,17 +7,17 @@
     <div class="text-h5 q-py-sm">Metrics From Today</div>
     <div class="row q-mb-lg">
       <q-chip square>
-        <q-avatar color="secondary" text-color="white">{{metrics.checkins}}</q-avatar>
+        <q-avatar color="secondary" text-color="white">{{
+          metrics.checkins
+        }}</q-avatar>
         User Check-Ins
       </q-chip>
       <q-chip square>
-        <q-avatar color="secondary" text-color="white">{{metrics.views}}</q-avatar>
+        <q-avatar color="secondary" text-color="white">{{
+          metrics.views
+        }}</q-avatar>
         Venue Views
       </q-chip>
-<!--      <q-chip square>-->
-<!--        <q-avatar color="secondary" text-color="white">50</q-avatar>-->
-<!--        Song Requests-->
-<!--      </q-chip>-->
     </div>
 
     <div class="text-h5 q-py-sm">Playback Controls</div>
@@ -39,13 +39,29 @@
           </div>
 
           <q-card-actions>
-            <q-btn @click="track.playing = ! track.playing" flat round color="primary" :icon="track.playing ? 'fas fa-pause' : 'fas fa-play'" />
-            <q-btn @click="track.played = 0" flat round color="primary" icon="fas fa-forward" />
+            <q-btn
+              @click="track.playing = !track.playing"
+              flat
+              round
+              color="primary"
+              :icon="track.playing ? 'fas fa-pause' : 'fas fa-play'"
+            />
+            <q-btn
+              @click="track.played = 0"
+              flat
+              round
+              color="primary"
+              icon="fas fa-forward"
+            />
           </q-card-actions>
         </q-card-section>
       </q-card-section>
       <q-card-section style="padding: 0">
-        <q-linear-progress size="25px" :value="track.played/track.length" color="primary">
+        <q-linear-progress
+          size="25px"
+          :value="track.played / track.length"
+          color="primary"
+        >
           <div class="absolute-full flex flex-center">
             <q-badge color="white" text-color="primary" :label="trackLength" />
           </div>
@@ -58,47 +74,46 @@
         <q-toolbar-title>Upcoming Songs</q-toolbar-title>
         <q-btn flat round><q-icon name="fas fa-plus"/></q-btn>
       </q-toolbar>
-      <q-list bordered>
-        <draggable v-model="queuedTracks" @start="drag = true" @end="drag = false">
-          <q-item v-for="track in queuedTracks" :key="track.name">
-            <q-item-section avatar>
-              <q-avatar>
-                <img :src="track.album.images[0].url" />
-              </q-avatar>
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>{{ track.name }}</q-item-label>
-              <q-item-label caption lines="1">{{ track.artists[0].name }}</q-item-label>
-              <q-item-label caption lines="1">{{trackLengthFormat(track.duration_ms / 1000)}}</q-item-label>
-            </q-item-section>
+      <q-list bordered separator>
+        <q-item v-for="track in queuedTracks" :key="track.name">
+          <q-item-section avatar>
+            <q-avatar>
+              <img :src="track.album.images[0].url" />
+            </q-avatar>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ track.name }}</q-item-label>
+            <q-item-label caption lines="1">{{
+              track.artists[0].name
+            }}</q-item-label>
+            <q-item-label caption lines="1">{{
+              trackLengthFormat(track.duration_ms / 1000)
+            }}</q-item-label>
+          </q-item-section>
 
-            <q-item-section side>
-              <div class="row items-center q-gutter-sm">
-                <q-btn @click="removeTrack(track)" flat round color="negative" icon="fas fa-minus-circle" />
-                <q-icon name="fas fa-grip-lines" size="sm" color="grey-5" />
-              </div>
-            </q-item-section>
-          </q-item>
-        </draggable>
+          <q-item-section side>
+            <div class="row items-center q-gutter-sm">
+              <q-btn
+                @click="removeTrack(track)"
+                flat
+                round
+                color="negative"
+                icon="fas fa-minus-circle"
+              />
+            </div>
+          </q-item-section>
+        </q-item>
       </q-list>
     </div>
 
     <div class="text-h5 q-py-sm">Manage Venue</div>
     <div class="row q-gutter-sm">
-      <q-btn
-        color="primary"
-        label="Edit Venue"
-        @click="navigateToEditPage"
-      />
-      <q-btn
-        color="primary"
-        label="Metrics"
-        @click="navigateToDashboardPage"
-      />
+      <q-btn color="primary" label="Edit Venue" @click="navigateToEditPage" />
+      <q-btn color="primary" label="Metrics" @click="navigateToDashboardPage" />
       <q-btn
         color="primary"
         label="Allow/Deny List"
-        :to="{name: 'Allow/Deny List'}"
+        :to="{ name: 'Allow/Deny List' }"
       />
     </div>
   </q-page>
@@ -109,7 +124,7 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 const db = firebase.firestore();
 import draggable from 'vuedraggable';
-import {trackLengthFormat} from '../../services/filters';
+import { trackLengthFormat } from '../../services/filters';
 
 export default {
   name: 'VenueDetails',
@@ -126,12 +141,12 @@ export default {
       track: {
         length: 228,
         played: 12,
-        playing: true,
+        playing: true
       },
       metrics: {
         views: 0,
-        checkins: 0,
-      },
+        checkins: 0
+      }
     };
   },
   mounted() {
@@ -152,24 +167,33 @@ export default {
         };
       });
 
-    let date = new Date(firebase.firestore.Timestamp.now().toMillis() - (24*60*60*1000))
-    db.collection('venueprofileviews').where('venueId', '==', this.venueId).where('timestamp', '>', date)
-      .onSnapshot((views) => {
+    let date = new Date(
+      firebase.firestore.Timestamp.now().toMillis() - 24 * 60 * 60 * 1000
+    );
+    db.collection('venueprofileviews')
+      .where('venueId', '==', this.venueId)
+      .where('timestamp', '>', date)
+      .onSnapshot(views => {
         this.metrics.views = views.size;
       });
-    db.collection('venuecheckins').where('venueId', '==', this.venueId).where('timestamp', '>', date)
-      .onSnapshot((checkins) => {
+    db.collection('venuecheckins')
+      .where('venueId', '==', this.venueId)
+      .where('timestamp', '>', date)
+      .onSnapshot(checkins => {
         this.metrics.checkins = checkins.size;
       });
   },
   computed: {
     queuedTracks() {
-      console.log(this.venue.queuedTracks);
       return this.venue.queuedTracks || [];
     },
     trackLength() {
-      return trackLengthFormat(this.track.played * 1000) + ' / ' + trackLengthFormat(this.track.length * 1000);
-    },
+      return (
+        trackLengthFormat(this.track.played * 1000) +
+        ' / ' +
+        trackLengthFormat(this.track.length * 1000)
+      );
+    }
   },
   methods: {
     removeTrack(track) {
@@ -178,15 +202,18 @@ export default {
           let firebaseUser = { ...user };
 
           if (firebaseUser) {
-            await db.collection('venues')
+            await db
+              .collection('venues')
               .doc(this.venueId)
-              .update({ queuedTracks: firebase.firestore.FieldValue.arrayRemove(track) });
+              .update({
+                queuedTracks: firebase.firestore.FieldValue.arrayRemove(track)
+              });
           }
         }
       });
     },
     trackLengthFormat(value) {
-      return trackLengthFormat(value*1000);
+      return trackLengthFormat(value * 1000);
     },
     navigateToEditPage() {
       this.$router.push(`/manage-venues/${this.venueId}/edit`);
@@ -194,6 +221,6 @@ export default {
     navigateToDashboardPage() {
       this.$router.push(`/manage-venues/dashboard/${this.venueId}`);
     }
-  },
+  }
 };
 </script>
