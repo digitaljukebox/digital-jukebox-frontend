@@ -123,14 +123,10 @@
 import firebase from 'firebase';
 import 'firebase/firestore';
 const db = firebase.firestore();
-import draggable from 'vuedraggable';
 import { trackLengthFormat } from '../../services/filters';
 
 export default {
   name: 'VenueDetails',
-  components: {
-    draggable
-  },
   data() {
     return {
       user: {},
